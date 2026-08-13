@@ -1,4 +1,5 @@
 export { default as Modal } from "./common/Modal";
+export { default as ImageModal } from "./common/ImageModal";
 export { default as Header } from "./layout/Header";
 export { default as AlbergueBanner } from "./albergue/AlbergueBanner";
 export { default as FormularioAlbergue } from "./albergue/FormularioAlbergue";

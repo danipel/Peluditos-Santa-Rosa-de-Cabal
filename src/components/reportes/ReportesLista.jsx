@@ -41,7 +41,7 @@ export default function ReportesLista({
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
       {reportes.map((reporte) => (
         <ReporteCard
           key={reporte.id}
