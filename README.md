@@ -1,41 +1,71 @@
-# Mascotas Perdidas — Pereira
+# Peluditos — Mascotas Perdidas (Santa Rosa de Cabal)
 
-Frontend en React + Vite conectado a Supabase (base de datos, storage de fotos y realtime).
+Plataforma web para ayudar a reencontrar mascotas perdidas tras el sismo del 10 de agosto. Permite publicar reportes de animales perdidos, registrar avistamientos, consultar el punto de acopio / albergue temporal y compartir contactos por WhatsApp o llamada.
 
-## 1. Crear el proyecto en Supabase
+Frontend en **React 18 + Vite** conectado a **Supabase** (base de datos PostgreSQL, storage de fotos, autenticación y tiempo real).
 
-1. Ve a https://supabase.com → Crea cuenta gratis → **New project**.
-2. Cuando esté listo, entra a **SQL Editor** → **New query**, pega el contenido de `schema.sql` (está en la carpeta de arriba de este proyecto) y dale **Run**.
-3. Ve a **Storage** → confirma que exista el bucket `fotos` y que esté marcado como **Public**. Si el script no lo creó, créalo manualmente: **New bucket** → nombre `fotos` → **Public bucket: ON**.
-4. Ve a **Project Settings → API**. Copia:
-   - **Project URL** → va en `VITE_SUPABASE_URL`
-   - **anon public key** → va en `VITE_SUPABASE_ANON_KEY`
+## Funcionalidades
 
-## 2. Configurar el proyecto localmente
+- **Reportes de mascotas**: publicar mascotas perdidas o que están en el albergue, con foto, especie, color, tamaño, sector y descripción.
+- **Avistamientos**: registrar dónde y cuándo se vio a una mascota y verlos en su tarjeta.
+- **Filtros y búsqueda** por estado (perdido / en albergue / reunido), especie y texto libre.
+- **Contacto directo**: botones de llamada y WhatsApp preconfigurados.
+- **Albergue temporal**: banner con la ubicación y horario del punto de acopio (editable por admin).
+- **Acceso administrador**: login con Supabase Auth para editar el albergue y cambiar estados.
+- **Tiempo real**: los cambios se reflejan al instante vía Realtime.
 
-```bash
-cp .env.example .env
-# edita .env y pega tus valores de Supabase
-npm install
-npm run dev
+## Stack
+
+- React 18 + Vite
+- Supabase (`@supabase/supabase-js`) — base de datos, Storage, Auth y Realtime
+- `lucide-react` (iconos)
+- Tipografía: Inter
+
+## Requisitos
+
+- Node.js 18+ y `pnpm` (o `npm`)
+
+## Estructura del proyecto
+
+```
+src/
+├── constants/mascotas.js       # Estados y especies
+├── services/                   # Capa de acceso a Supabase
+│   ├── reportesService.js
+│   └── albergueService.js
+├── hooks/                      # Lógica de negocio y estado reactivo
+│   ├── useReportes.js
+│   └── useAlbergue.js
+├── components/                 # Componentes por dominio
+│   ├── common/                 # Modal, ImageModal
+│   ├── layout/                 # Header
+│   ├── albergue/               # AlbergueBanner, FormularioAlbergue
+│   ├── reportes/               # ReporteCard, Filtros, Lista, Formulario, BotonReportar
+│   └── index.js
+├── App.jsx                     # Orquestador principal
+├── supabaseClient.js
+└── main.jsx
 ```
 
-Esto te abre la app en `http://localhost:5173`. Pruébala, crea un par de reportes de prueba, sube una foto, cambia estados.
+> Nota: `App.jsx` es autónomo e incluye la mayoría de la lógica y vistas; la carpeta `components/` contiene versiones modulares de esos mismos componentes como base para el desarrollo colaborativo.
 
-## 3. Desplegar en Vercel (gratis)
 
-1. Sube esta carpeta a un repositorio de GitHub (puede ser privado).
-2. Ve a https://vercel.com → **Add New Project** → importa el repo.
-3. En **Environment Variables**, agrega `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` con los mismos valores de tu `.env`.
-4. Deploy. En 1-2 minutos tienes una URL pública (`tuapp.vercel.app`) que puedes compartir directamente por WhatsApp o redes.
+## Ejecutar en local
 
-Cada vez que hagas `git push`, Vercel vuelve a desplegar automáticamente.
+```bash
+pnpm install      # o npm install
+pnpm dev          # o npm run dev
+```
 
-## 4. Alternativa: Netlify
+Abre `http://localhost:5173`.
 
-Mismo flujo: conectar el repo, definir `Build command: npm run build`, `Publish directory: dist`, y las mismas variables de entorno.
+## Build y preview
 
-## Notas de seguridad para cuando tengas tiempo de mejorar esto
+```bash
+pnpm build
+pnpm preview
+```
 
-- Las políticas RLS actuales son abiertas (cualquiera puede insertar/actualizar) para priorizar velocidad de uso en la emergencia. La tabla ya guarda un `pin` de 4 dígitos por reporte — el siguiente paso natural es exigir ese pin antes de permitir el cambio de estado desde el frontend, o mover esa validación a una Edge Function de Supabase.
-- Si el uso crece mucho, revisa los límites de la capa gratuita de Supabase (storage y ancho de banda) en el dashboard.
+## Notas de seguridad
+
+- Las políticas RLS actuales son abiertas (cualquiera puede insertar/actualizar) para priorizar la velocidad de uso durante la emergencia.
