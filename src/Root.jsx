@@ -6,8 +6,8 @@ export default function Root() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/city" element={<App />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<App />} />
       </Routes>
     </BrowserRouter>
   );
