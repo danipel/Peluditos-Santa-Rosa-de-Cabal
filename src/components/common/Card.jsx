@@ -144,7 +144,7 @@ export default function Card({
             }}
           >
             <MapPin size={12} />
-            {reporte.sector}
+            {reporte.sector + " - " + reporte.ciudad}
           </div>
 
           {reporte.descripcion && (

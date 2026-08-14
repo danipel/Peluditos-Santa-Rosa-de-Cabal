@@ -1,11 +1,16 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Modal from "../common/Modal";
 
 function FormularioAlbergue({ initial, onClose, onSave }) {
+    const [searchParams] = useSearchParams();
+    const ciudad = searchParams.get("ciudad");
+
     const [form, setForm] = useState({
         nombre: initial?.nombre || "",
         direccion: initial?.direccion || "",
         horario: initial?.horario || "",
+        ciudad: ciudad || "",
     });
 
     const inputStyle = {
@@ -83,6 +88,16 @@ function FormularioAlbergue({ initial, onClose, onSave }) {
                                 horario: e.target.value,
                             }))
                         }
+                        style={inputStyle}
+                    />
+                </div>
+
+                <div>
+                    <div style={labelStyle}>Ciudad</div>
+
+                    <input
+                        readOnly={true}
+                        value={form.ciudad}
                         style={inputStyle}
                     />
                 </div>
