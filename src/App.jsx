@@ -21,6 +21,7 @@ export default function App() {
   const [showAlbergueForm, setShowAlbergueForm] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [avistamientoDe, setAvistamientoDe] = useState(null); // reporte_id activo
+  const [fotoAmpliada, setFotoAmpliada] = useState(null);
   const [filtroTipo, setFiltroTipo] = useState("todos");
   const [filtroEspecie, setFiltroEspecie] = useState("todas");
   const [busqueda, setBusqueda] = useState("");
@@ -252,6 +253,7 @@ export default function App() {
                 coincidencias={coincidencias(r)}
                 onCambiarEstado={cambiarEstado}
                 onAgregarAvistamiento={() => setAvistamientoDe(r.id)}
+                onAmpliarFoto={() => setFotoAmpliada(r.foto_url)}
               />
             ))}
           </div>
@@ -266,11 +268,12 @@ export default function App() {
       {showAlbergueForm && <FormularioAlbergue initial={albergue} onClose={() => setShowAlbergueForm(false)} onSave={guardarAlbergue} />}
       {showLogin && <FormularioLogin onClose={() => setShowLogin(false)} onLogin={login} />}
       {avistamientoDe && <FormularioAvistamiento onClose={() => setAvistamientoDe(null)} onSave={(form) => agregarAvistamiento(avistamientoDe, form)} />}
+      {fotoAmpliada && <VisorFoto src={fotoAmpliada} onClose={() => setFotoAmpliada(null)} />}
     </div>
   );
 }
 
-function Card({ reporte, session, avistamientos, coincidencias, onCambiarEstado, onAgregarAvistamiento }) {
+function Card({ reporte, session, avistamientos, coincidencias, onCambiarEstado, onAgregarAvistamiento, onAmpliarFoto }) {
   const estado = ESTADOS[reporte.estado] || ESTADOS.perdido;
   const tel = (reporte.telefono || "").replace(/\D/g, "");
   const waMsg = encodeURIComponent(`Hola, escribo por el reporte de ${ESPECIES[reporte.especie].toLowerCase()} en ${reporte.sector} (Mascotas Perdidas Pereira).`);
@@ -278,7 +281,10 @@ function Card({ reporte, session, avistamientos, coincidencias, onCambiarEstado,
   return (
     <div style={{ background: "#fff", border: "1px solid #DAD6CC", borderRadius: 12, overflow: "hidden" }}>
       <div style={{ display: "flex", gap: 12, padding: 12 }}>
-        <div style={{ width: 72, height: 72, borderRadius: 10, background: "#EFEDE6", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+        <div
+          onClick={reporte.foto_url ? onAmpliarFoto : undefined}
+          style={{ width: 72, height: 72, borderRadius: 10, background: "#EFEDE6", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", cursor: reporte.foto_url ? "pointer" : "default" }}
+        >
           {reporte.foto_url ? <img src={reporte.foto_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <PawPrint size={26} color="#B4AF9F" />}
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -546,6 +552,18 @@ function FormularioAlbergue({ initial, onClose, onSave }) {
         </button>
       </form>
     </Modal>
+  );
+}
+
+function VisorFoto({ src, onClose }) {
+  return (
+    <div
+      style={{ position: "fixed", inset: 0, background: "rgba(10,10,9,0.9)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 60, padding: 16 }}
+      onClick={onClose}
+    >
+      <X size={26} color="#fff" style={{ position: "absolute", top: 16, right: 16, cursor: "pointer" }} onClick={onClose} />
+      <img src={src} alt="" style={{ maxWidth: "100%", maxHeight: "90vh", borderRadius: 8, objectFit: "contain" }} onClick={(e) => e.stopPropagation()} />
+    </div>
   );
 }
 
