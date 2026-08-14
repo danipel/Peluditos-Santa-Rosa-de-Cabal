@@ -68,7 +68,8 @@ function FormularioReporte({
 
     if (
       !form.ciudad.trim() ||
-      !form.nombre.trim() ||
+      (form.categoria === "personas" &&
+        !form.nombre.trim()) ||
       !form.sector.trim() ||
       !form.telefono.trim()
     ) {
@@ -84,7 +85,18 @@ function FormularioReporte({
 
     setEnviando(true);
 
-    const pin = await onSave(form, file);
+    const formConNombre = {
+      ...form,
+      nombre:
+        form.categoria === "mascotas" &&
+        !form.nombre.trim()
+          ? form.especie === "gato"
+            ? "Gato"
+            : "Perro"
+          : form.nombre,
+    };
+
+    const pin = await onSave(formConNombre, file);
 
     setEnviando(false);
 
@@ -329,7 +341,7 @@ function FormularioReporte({
 
               <div style={{ flex: 1 }}>
                 <div style={labelStyle}>
-                  Nombre *
+                  Nombre
                 </div>
 
                 <input
@@ -341,9 +353,13 @@ function FormularioReporte({
                     )
                   }
                   style={inputStyle}
-                  placeholder="Ej: Max"
-                  required
+                  placeholder="Opcional"
                 />
+
+                <div style={helperStyle}>
+                  Si no se sabe, se usará
+                  Perro o Gato según la especie.
+                </div>
               </div>
             </div>
 
