@@ -47,15 +47,22 @@ export default function Modal({ title, onClose, children }) {
               size={16}
               style={{ cursor: "pointer" }}
               onClick={onClose}
-            />{" "}
+            />
+
             {title}
           </div>
+
           <X
             size={18}
-            style={{ cursor: "pointer", color: "#8A8A85" }}
+            style={{
+              cursor: "pointer",
+              color: "#8A8A85",
+            }}
             onClick={onClose}
           />
         </div>
+
+        {/* Aquí aparece el contenido */}
         {children}
       </div>
     </div>

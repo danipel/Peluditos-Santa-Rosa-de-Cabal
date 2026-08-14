@@ -1,6 +1,6 @@
-import { PawPrint } from "lucide-react";
+import { PawPrint, LogIn, LogOut } from "lucide-react";
 
-export default function Header() {
+export default function Header({ session, onLogin, onLogout }) {
   return (
     <header
       style={{
@@ -15,24 +15,69 @@ export default function Header() {
           margin: "0 auto",
           display: "flex",
           alignItems: "center",
-          gap: 10,
+          justifyContent: "space-between",
         }}
       >
-        <PawPrint size={26} strokeWidth={2} />
-        <div>
-          <div
-            style={{
-              fontSize: 18,
-              fontWeight: 700,
-              letterSpacing: -0.2,
-            }}
-          >
-            Mascotas Perdidas — Santa Rosa de Cabal
-          </div>
-          <div style={{ fontSize: 12.5, opacity: 0.75 }}>
-            Reencuentro tras el sismo del 10 de agosto
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+          }}
+        >
+          <PawPrint size={26} strokeWidth={2} />
+
+          <div>
+            <div
+              style={{
+                fontSize: 18,
+                fontWeight: 700,
+                letterSpacing: -0.2,
+              }}
+            >
+              Mascotas Perdidas — Santa Rosa de Cabal
+            </div>
+
+            <div
+              style={{
+                fontSize: 12.5,
+                opacity: 0.75,
+              }}
+            >
+              Reencuentro tras el sismo del 10 de agosto
+            </div>
           </div>
         </div>
+
+        {session ? (
+          <button
+            onClick={onLogout}
+            title="Cerrar sesión admin"
+            style={{
+              background: "none",
+              border: "none",
+              color: "#F6F5F2",
+              opacity: 0.8,
+              cursor: "pointer",
+            }}
+          >
+            <LogOut size={18} />
+          </button>
+        ) : (
+          <button
+            onClick={onLogin}
+            title="Acceso administrador"
+            style={{
+              background: "none",
+              border: "none",
+              color: "#F6F5F2",
+              opacity: 0.5,
+              cursor: "pointer",
+            }}
+          >
+            <LogIn size={18} />
+          </button>
+        )}
       </div>
     </header>
   );
