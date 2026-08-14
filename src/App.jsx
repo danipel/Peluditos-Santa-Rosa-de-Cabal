@@ -54,11 +54,7 @@ export default function App() {
   const [reportes, setReportes] = useState([]);
   const [avistamientos, setAvistamientos] = useState([]);
 
-  const [albergue, setAlbergue] = useState({
-    nombre: "",
-    direccion: "",
-    horario: "",
-  });
+  const [albergues, setAlbergues] = useState([]);
 
   const [session, setSession] = useState(null);
 
@@ -141,10 +137,10 @@ export default function App() {
       .from("albergue_info")
       .select("*")
       .eq("ciudad", ciudad)
-      .single();
+      .order("id", { ascending: true });
 
-    if (!error && data) {
-      setAlbergue(data);
+    if (!error) {
+      setAlbergues(data || []);
     }
   }
 
@@ -391,7 +387,7 @@ export default function App() {
         "No se pudo guardar (¿sigues con sesión iniciada?)."
       );
     } else {
-      setAlbergue(info);
+      await cargarAlbergue();
       setShowAlbergueForm(false);
     }
   }
@@ -629,117 +625,97 @@ export default function App() {
           </button>
         </div>
 
-        {/* Albergue */}
+        {/* Albergues */}
 
-        <div
-          style={{
-            background: "#FFFFFF",
-            border:
-              "1px solid #DAD6CC",
-            borderLeft:
-              "4px solid #1F6E5C",
-            borderRadius: 10,
-            padding:
-              "12px 14px",
-            marginBottom: 16,
-            display: "flex",
-            justifyContent:
-              "space-between",
-            gap: 10,
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              gap: 10,
-            }}
-          >
-            <Home
-              size={18}
-              color="#1F6E5C"
+        <div style={{ marginBottom: 16 }}>
+          {albergues.length === 0 && (
+            <div
               style={{
-                marginTop: 2,
-                flexShrink: 0,
+                background: "#FFFFFF",
+                border: "1px solid #DAD6CC",
+                borderLeft: "4px solid #1F6E5C",
+                borderRadius: 10,
+                padding: "12px 14px",
+                display: "flex",
+                justifyContent: "space-between",
+                gap: 10,
               }}
-            />
-
-            <div>
-              <div
-                style={{
-                  fontWeight: 700,
-                  fontSize: 13.5,
-                }}
-              >
-                Punto de acopio /
-                albergue temporal
+            >
+              <div style={{ display: "flex", gap: 10 }}>
+                <Home
+                  size={18}
+                  color="#1F6E5C"
+                  style={{ marginTop: 2, flexShrink: 0 }}
+                />
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: 13.5 }}>
+                    Punto de acopio / albergue temporal
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 13,
+                      color: "#8A8A85",
+                      marginTop: 2,
+                    }}
+                  >
+                    Aún no se ha registrado la ubicación
+                  </div>
+                </div>
               </div>
-
-              {albergue.nombre ||
-                albergue.direccion ? (
-                <div
-                  style={{
-                    fontSize: 13,
-                    color: "#4A4A47",
-                    marginTop: 2,
-                  }}
-                >
-                  {albergue.nombre && (
-                    <div>
-                      {
-                        albergue.nombre
-                      }
-                    </div>
-                  )}
-
-                  {albergue.direccion && (
-                    <div>
-                      {
-                        albergue.direccion
-                      }
-                    </div>
-                  )}
-
-                  {albergue.horario && (
-                    <div
-                      style={{
-                        opacity: 0.8,
-                      }}
-                    >
-                      Horario:{" "}
-                      {
-                        albergue.horario
-                      }
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div
-                  style={{
-                    fontSize: 13,
-                    color: "#8A8A85",
-                    marginTop: 2,
-                  }}
-                >
-                  Aún no se ha
-                  registrado la
-                  ubicación
-                </div>
-              )}
             </div>
-          </div>
+          )}
+
+          {albergues.map((a) => (
+            <div
+              key={a.id}
+              style={{
+                background: "#FFFFFF",
+                border: "1px solid #DAD6CC",
+                borderLeft: "4px solid #1F6E5C",
+                borderRadius: 10,
+                padding: "12px 14px",
+                marginBottom: 8,
+                display: "flex",
+                justifyContent: "space-between",
+                gap: 10,
+              }}
+            >
+              <div style={{ display: "flex", gap: 10 }}>
+                <Home
+                  size={18}
+                  color="#1F6E5C"
+                  style={{ marginTop: 2, flexShrink: 0 }}
+                />
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: 13.5 }}>
+                    {a.nombre || "Punto de acopio / albergue temporal"}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 13,
+                      color: "#4A4A47",
+                      marginTop: 2,
+                    }}
+                  >
+                    {a.direccion && <div>{a.direccion}</div>}
+                    {a.horario && (
+                      <div style={{ opacity: 0.8 }}>
+                        Horario: {a.horario}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
 
           {session && (
             <button
-              onClick={() =>
-                setShowAlbergueForm(
-                  true
-                )
-              }
+              onClick={() => setShowAlbergueForm(true)}
               style={{
                 fontSize: 12,
                 color: "#1F6E5C",
-                background:
-                  "none",
+                background: "none",
                 border: "none",
                 cursor: "pointer",
                 fontWeight: 600,
@@ -1080,7 +1056,7 @@ export default function App() {
       {
         showAlbergueForm && (
           <FormularioAlbergue
-            initial={albergue}
+            initial={albergues[0]}
             onClose={() =>
               setShowAlbergueForm(
                 false
