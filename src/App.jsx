@@ -174,7 +174,7 @@ export default function App() {
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <PawPrint size={26} strokeWidth={2} />
             <div>
-              <div style={{ fontSize: 18, fontWeight: 700, letterSpacing: -0.2 }}>Mascotas Perdidas — Pereira</div>
+              <div style={{ fontSize: 18, fontWeight: 700, letterSpacing: -0.2 }}>Mascotas Perdidas — Santa Rosa de Cabal</div>
               <div style={{ fontSize: 12.5, opacity: 0.75 }}>Reencuentro tras el sismo del 10 de agosto</div>
             </div>
           </div>
@@ -276,7 +276,7 @@ export default function App() {
 function Card({ reporte, session, avistamientos, coincidencias, onCambiarEstado, onAgregarAvistamiento, onAmpliarFoto }) {
   const estado = ESTADOS[reporte.estado] || ESTADOS.perdido;
   const tel = (reporte.telefono || "").replace(/\D/g, "");
-  const waMsg = encodeURIComponent(`Hola, escribo por el reporte de ${ESPECIES[reporte.especie].toLowerCase()} en ${reporte.sector} (Mascotas Perdidas Pereira).`);
+  const waMsg = encodeURIComponent(`Hola, escribo por el reporte de ${ESPECIES[reporte.especie].toLowerCase()} en ${reporte.sector} (Mascotas Perdidas Santa Rosa de Cabal).`);
 
   return (
     <div style={{ background: "#fff", border: "1px solid #DAD6CC", borderRadius: 12, overflow: "hidden" }}>
