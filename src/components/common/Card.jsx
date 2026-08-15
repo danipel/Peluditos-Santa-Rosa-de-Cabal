@@ -6,9 +6,10 @@ import {
   AlertCircle,
   Eye,
   Trash2,
+  Heart,
 } from "lucide-react";
 
-import { ESTADOS, ESPECIES } from "../../constants/mascotas";
+import { ESTADOS, ESPECIES, TELEFONO_REUNIDO } from "../../constants/mascotas";
 
 export default function Card({
   reporte,
@@ -28,6 +29,10 @@ export default function Card({
 
   const waMsg = encodeURIComponent(
     `Hola, escribo por el reporte de ${especie.toLowerCase()} en ${reporte.sector} (Mascotas Perdidas Santa Rosa de Cabal).`
+  );
+
+  const waReunidoMsg = encodeURIComponent(
+    `Hola, quiero informar que ya está en casa la mascota del reporte en ${reporte.sector} (Mascotas Perdidas Santa Rosa de Cabal).`
   );
 
   return (
@@ -307,6 +312,32 @@ export default function Card({
             <Eye size={13} />
             + Avistamiento
           </button>
+        )}
+
+        {reporte.estado !== "reunido" && (
+          <a
+            href={`https://wa.me/57${TELEFONO_REUNIDO}?text=${waReunidoMsg}`}
+            target="_blank"
+            rel="noreferrer"
+            title="Avisar que la mascota ya está en casa"
+            style={{
+              flex: 1.2,
+              textAlign: "center",
+              padding: "9px 0",
+              fontSize: 12.5,
+              fontWeight: 700,
+              color: "#C0392B",
+              textDecoration: "none",
+              display: "flex",
+              justifyContent: "center",
+              gap: 5,
+              alignItems: "center",
+              borderRight: "1px solid #EFEDE6",
+            }}
+          >
+            <Heart size={13} />
+            Ya está en casa
+          </a>
         )}
 
         {session && (
