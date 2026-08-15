@@ -35,7 +35,7 @@ export default function Header({ session, onLogin, onLogout }) {
                 letterSpacing: -0.2,
               }}
             >
-              Mascotas Perdidas — Santa Rosa de Cabal
+              Mascotas Perdidas — Risaralda
             </div>
 
             <div
