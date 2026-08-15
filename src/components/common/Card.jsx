@@ -46,6 +46,109 @@ export default function Card({
     `Hola, quiero informar que ya está en casa la mascota del reporte en ${reporte.sector} (Mascotas Perdidas Santa Rosa de Cabal).`
   );
 
+  const estiloAccion = (color, fontWeight = 600) => ({
+    width: "100%",
+    border: "none",
+    background: "transparent",
+    color,
+    fontSize: 12.5,
+    fontWeight,
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 5,
+    padding: "9px 4px",
+    textDecoration: "none",
+    textAlign: "center",
+  });
+
+  const acciones = [];
+
+  if (tel && reporte.estado !== "reunido") {
+    acciones.push(
+      <a key="llamar" href={`tel:${tel}`} style={estiloAccion("#1F3A34")}>
+        <Phone size={13} /> Llamar
+      </a>
+    );
+    acciones.push(
+      <a
+        key="whatsapp"
+        href={`https://wa.me/57${tel}?text=${waMsg}`}
+        target="_blank"
+        rel="noreferrer"
+        style={estiloAccion("#1F6E5C")}
+      >
+        <MessageCircle size={13} /> WhatsApp
+      </a>
+    );
+  }
+
+  if (reporte.estado !== "reunido") {
+    acciones.push(
+      <button
+        key="avistamiento"
+        type="button"
+        onClick={onAgregarAvistamiento}
+        style={estiloAccion("#8A6D00")}
+      >
+        <Eye size={13} /> + Avistamiento
+      </button>
+    );
+    acciones.push(
+      <a
+        key="casa"
+        href={`https://wa.me/57${TELEFONO_REUNIDO}?text=${waReunidoMsg}`}
+        target="_blank"
+        rel="noreferrer"
+        title="Avisar que la mascota ya está en casa"
+        style={estiloAccion("#C0392B", 700)}
+      >
+        <Heart size={13} /> Ya está en casa
+      </a>
+    );
+  }
+
+  if (session) {
+    acciones.push(
+      <select
+        key="estado"
+        value={reporte.estado}
+        onChange={(e) =>
+          onCambiarEstado(reporte.id, e.target.value)
+        }
+        style={{
+          width: "100%",
+          border: "none",
+          background: "transparent",
+          fontSize: 12.5,
+          fontWeight: 600,
+          color: "#4A4A47",
+          textAlign: "center",
+          cursor: "pointer",
+          padding: "9px 4px",
+        }}
+      >
+        {Object.entries(ESTADOS).map(([k, v]) => (
+          <option key={k} value={k}>
+            Marcar: {v.label}
+          </option>
+        ))}
+      </select>
+    );
+    acciones.push(
+      <button
+        key="borrar"
+        type="button"
+        onClick={() => onBorrar(reporte.id)}
+        title="Eliminar reporte"
+        style={estiloAccion("#B4472E")}
+      >
+        <Trash2 size={15} />
+      </button>
+    );
+  }
+
   return (
     <>
       <style>{estilos}</style>
@@ -247,153 +350,30 @@ export default function Card({
 
         <div
           style={{
-            display: "flex",
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
             borderTop: "1px solid #EFEDE6",
             marginTop: "auto",
           }}
         >
-          {tel && reporte.estado !== "reunido" && (
-            <>
-              <a
-                href={`tel:${tel}`}
-                style={{
-                  flex: 1,
-                  textAlign: "center",
-                  padding: "9px 0",
-                  fontSize: 12.5,
-                  fontWeight: 600,
-                  color: "#1F3A34",
-                  textDecoration: "none",
-                  display: "flex",
-                  justifyContent: "center",
-                  gap: 5,
-                  alignItems: "center",
-                  borderRight: "1px solid #EFEDE6",
-                }}
-              >
-                <Phone size={13} />
-                Llamar
-              </a>
-
-              <a
-                href={`https://wa.me/57${tel}?text=${waMsg}`}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  flex: 1,
-                  textAlign: "center",
-                  padding: "9px 0",
-                  fontSize: 12.5,
-                  fontWeight: 600,
-                  color: "#1F6E5C",
-                  textDecoration: "none",
-                  display: "flex",
-                  justifyContent: "center",
-                  gap: 5,
-                  alignItems: "center",
-                  borderRight: "1px solid #EFEDE6",
-                }}
-              >
-                <MessageCircle size={13} />
-                WhatsApp
-              </a>
-            </>
-          )}
-
-          {reporte.estado !== "reunido" && (
-            <button
-              onClick={onAgregarAvistamiento}
+          {acciones.map((accion, i) => (
+            <div
+              key={i}
               style={{
-                flex: 1.3,
-                border: "none",
-                background: "transparent",
-                fontSize: 12.5,
-                fontWeight: 600,
-                color: "#8A6D00",
-                cursor: "pointer",
                 display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 4,
-                borderRight: "1px solid #EFEDE6",
+                borderRight:
+                  i % 2 === 0
+                    ? "1px solid #EFEDE6"
+                    : "none",
+                borderTop:
+                  i >= 2
+                    ? "1px solid #EFEDE6"
+                    : "none",
               }}
             >
-              <Eye size={13} />
-              + Avistamiento
-            </button>
-          )}
-
-          {reporte.estado !== "reunido" && (
-            <a
-              href={`https://wa.me/57${TELEFONO_REUNIDO}?text=${waReunidoMsg}`}
-              target="_blank"
-              rel="noreferrer"
-              title="Avisar que la mascota ya está en casa"
-              style={{
-                flex: 1.2,
-                textAlign: "center",
-                padding: "9px 0",
-                fontSize: 12.5,
-                fontWeight: 700,
-                color: "#C0392B",
-                textDecoration: "none",
-                display: "flex",
-                justifyContent: "center",
-                gap: 5,
-                alignItems: "center",
-                borderRight: "1px solid #EFEDE6",
-              }}
-            >
-              <Heart size={13} />
-              Ya está en casa
-            </a>
-          )}
-
-          {session && (
-            <select
-              value={reporte.estado}
-              onChange={(e) =>
-                onCambiarEstado(reporte.id, e.target.value)
-              }
-              style={{
-                flex: 1.2,
-                border: "none",
-                background: "transparent",
-                fontSize: 12.5,
-                fontWeight: 600,
-                color: "#4A4A47",
-                textAlign: "center",
-                cursor: "pointer",
-              }}
-            >
-              {Object.entries(ESTADOS).map(([k, v]) => (
-                <option key={k} value={k}>
-                  Marcar: {v.label}
-                </option>
-              ))}
-            </select>
-          )}
-
-          {session && (
-            <button
-              onClick={() => onBorrar(reporte.id)}
-              title="Eliminar reporte"
-              style={{
-                flex: 0.6,
-                border: "none",
-                background: "transparent",
-                color: "#B4472E",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 4,
-                borderLeft: "1px solid #EFEDE6",
-              }}
-            >
-              <Trash2 size={15} />
-            </button>
-          )}
+              {accion}
+            </div>
+          ))}
         </div>
       </div>
     </>
