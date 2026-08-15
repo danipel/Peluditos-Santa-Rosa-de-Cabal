@@ -591,6 +591,20 @@ export default function App() {
         color: "#2A2A28",
       }}
     >
+      <style>{`
+        .reportes-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+        @media (min-width: 640px) {
+          .reportes-grid {
+            grid-template-columns: repeat(3, 1fr);
+            align-items: stretch;
+          }
+        }
+      `}</style>
+
       <Header
         session={session}
         onLogin={() => setShowLogin(true)}
@@ -1000,15 +1014,7 @@ export default function App() {
             todavía.
           </div>
         ) : (
-          <div
-            style={{
-              display:
-                "flex",
-              flexDirection:
-                "column",
-              gap: 10,
-            }}
-          >
+          <div className="reportes-grid">
             {filtrados.map(
               (r) => (
                 <Card

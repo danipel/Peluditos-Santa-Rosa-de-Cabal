@@ -11,6 +11,17 @@ import {
 
 import { ESTADOS, ESPECIES, TELEFONO_REUNIDO } from "../../constants/mascotas";
 
+const estilos = `
+  .card-imagen {
+    height: 160px;
+  }
+  @media (min-width: 640px) {
+    .card-imagen {
+      height: 200px;
+    }
+  }
+`;
+
 export default function Card({
   reporte,
   session,
@@ -36,27 +47,24 @@ export default function Card({
   );
 
   return (
-    <div
-      style={{
-        background: "#fff",
-        border: "1px solid #DAD6CC",
-        borderRadius: 12,
-        overflow: "hidden",
-      }}
-    >
+    <>
+      <style>{estilos}</style>
+
       <div
         style={{
+          background: "#fff",
+          border: "1px solid #DAD6CC",
+          borderRadius: 12,
+          overflow: "hidden",
           display: "flex",
-          gap: 12,
-          padding: 12,
+          flexDirection: "column",
         }}
       >
         <div
           onClick={reporte.foto_url ? onAmpliarFoto : undefined}
+          className="card-imagen"
           style={{
-            width: 72,
-            height: 72,
-            borderRadius: 10,
+            width: "100%",
             background: "#EFEDE6",
             flexShrink: 0,
             display: "flex",
@@ -77,7 +85,7 @@ export default function Card({
               }}
             />
           ) : (
-            <PawPrint size={26} color="#B4AF9F" />
+            <PawPrint size={40} color="#B4AF9F" />
           )}
         </div>
 
@@ -85,6 +93,7 @@ export default function Card({
           style={{
             flex: 1,
             minWidth: 0,
+            padding: 12,
           }}
         >
           <div
@@ -166,117 +175,167 @@ export default function Card({
             </div>
           )}
         </div>
-      </div>
 
-      {avistamientos.length > 0 && (
-        <div
-          style={{
-            padding: "0 12px 10px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 4,
-          }}
-        >
+        {avistamientos.length > 0 && (
           <div
             style={{
-              fontSize: 11.5,
-              fontWeight: 700,
-              color: "#8A6D00",
+              padding: "0 12px 10px",
               display: "flex",
-              alignItems: "center",
+              flexDirection: "column",
               gap: 4,
             }}
           >
-            <Eye size={12} />
-
-            {avistamientos.length} avistamiento
-            {avistamientos.length > 1 ? "s" : ""}
-          </div>
-
-          {avistamientos.slice(0, 3).map((a) => (
             <div
-              key={a.id}
               style={{
-                fontSize: 12,
-                color: "#6B6B66",
-                paddingLeft: 16,
+                fontSize: 11.5,
+                fontWeight: 700,
+                color: "#8A6D00",
+                display: "flex",
+                alignItems: "center",
+                gap: 4,
               }}
             >
-              {a.sector}
-              {a.hora ? ` · ${a.hora}` : ""}
-              {a.descripcion ? ` — ${a.descripcion}` : ""}
-            </div>
-          ))}
-        </div>
-      )}
+              <Eye size={12} />
 
-      {coincidencias.length > 0 && (
+              {avistamientos.length} avistamiento
+              {avistamientos.length > 1 ? "s" : ""}
+            </div>
+
+            {avistamientos.slice(0, 3).map((a) => (
+              <div
+                key={a.id}
+                style={{
+                  fontSize: 12,
+                  color: "#6B6B66",
+                  paddingLeft: 16,
+                }}
+              >
+                {a.sector}
+                {a.hora ? ` · ${a.hora}` : ""}
+                {a.descripcion ? ` — ${a.descripcion}` : ""}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {coincidencias.length > 0 && (
+          <div
+            style={{
+              background: "#FAF1D6",
+              padding: "8px 12px",
+              fontSize: 12.5,
+              color: "#7A5F00",
+              display: "flex",
+              gap: 6,
+            }}
+          >
+            <AlertCircle
+              size={14}
+              style={{
+                marginTop: 1,
+                flexShrink: 0,
+              }}
+            />
+
+            <span>
+              Hay actividad (
+              {avistamientos.length ? "avistamientos" : "reportes"}
+              ) en el mismo sector — revisa si coincide.
+            </span>
+          </div>
+        )}
+
         <div
           style={{
-            background: "#FAF1D6",
-            padding: "8px 12px",
-            fontSize: 12.5,
-            color: "#7A5F00",
             display: "flex",
-            gap: 6,
+            borderTop: "1px solid #EFEDE6",
+            marginTop: "auto",
           }}
         >
-          <AlertCircle
-            size={14}
-            style={{
-              marginTop: 1,
-              flexShrink: 0,
-            }}
-          />
+          {tel && reporte.estado !== "reunido" && (
+            <>
+              <a
+                href={`tel:${tel}`}
+                style={{
+                  flex: 1,
+                  textAlign: "center",
+                  padding: "9px 0",
+                  fontSize: 12.5,
+                  fontWeight: 600,
+                  color: "#1F3A34",
+                  textDecoration: "none",
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: 5,
+                  alignItems: "center",
+                  borderRight: "1px solid #EFEDE6",
+                }}
+              >
+                <Phone size={13} />
+                Llamar
+              </a>
 
-          <span>
-            Hay actividad (
-            {avistamientos.length ? "avistamientos" : "reportes"}
-            ) en el mismo sector — revisa si coincide.
-          </span>
-        </div>
-      )}
+              <a
+                href={`https://wa.me/57${tel}?text=${waMsg}`}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  flex: 1,
+                  textAlign: "center",
+                  padding: "9px 0",
+                  fontSize: 12.5,
+                  fontWeight: 600,
+                  color: "#1F6E5C",
+                  textDecoration: "none",
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: 5,
+                  alignItems: "center",
+                  borderRight: "1px solid #EFEDE6",
+                }}
+              >
+                <MessageCircle size={13} />
+                WhatsApp
+              </a>
+            </>
+          )}
 
-      <div
-        style={{
-          display: "flex",
-          borderTop: "1px solid #EFEDE6",
-        }}
-      >
-        {tel && reporte.estado !== "reunido" && (
-          <>
-            <a
-              href={`tel:${tel}`}
+          {reporte.estado !== "reunido" && (
+            <button
+              onClick={onAgregarAvistamiento}
               style={{
-                flex: 1,
-                textAlign: "center",
-                padding: "9px 0",
+                flex: 1.3,
+                border: "none",
+                background: "transparent",
                 fontSize: 12.5,
                 fontWeight: 600,
-                color: "#1F3A34",
-                textDecoration: "none",
+                color: "#8A6D00",
+                cursor: "pointer",
                 display: "flex",
-                justifyContent: "center",
-                gap: 5,
                 alignItems: "center",
+                justifyContent: "center",
+                gap: 4,
                 borderRight: "1px solid #EFEDE6",
               }}
             >
-              <Phone size={13} />
-              Llamar
-            </a>
+              <Eye size={13} />
+              + Avistamiento
+            </button>
+          )}
 
+          {reporte.estado !== "reunido" && (
             <a
-              href={`https://wa.me/57${tel}?text=${waMsg}`}
+              href={`https://wa.me/57${TELEFONO_REUNIDO}?text=${waReunidoMsg}`}
               target="_blank"
               rel="noreferrer"
+              title="Avisar que la mascota ya está en casa"
               style={{
-                flex: 1,
+                flex: 1.2,
                 textAlign: "center",
                 padding: "9px 0",
                 fontSize: 12.5,
-                fontWeight: 600,
-                color: "#1F6E5C",
+                fontWeight: 700,
+                color: "#C0392B",
                 textDecoration: "none",
                 display: "flex",
                 justifyContent: "center",
@@ -285,107 +344,58 @@ export default function Card({
                 borderRight: "1px solid #EFEDE6",
               }}
             >
-              <MessageCircle size={13} />
-              WhatsApp
+              <Heart size={13} />
+              Ya está en casa
             </a>
-          </>
-        )}
+          )}
 
-        {reporte.estado !== "reunido" && (
-          <button
-            onClick={onAgregarAvistamiento}
-            style={{
-              flex: 1.3,
-              border: "none",
-              background: "transparent",
-              fontSize: 12.5,
-              fontWeight: 600,
-              color: "#8A6D00",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 4,
-              borderRight: "1px solid #EFEDE6",
-            }}
-          >
-            <Eye size={13} />
-            + Avistamiento
-          </button>
-        )}
+          {session && (
+            <select
+              value={reporte.estado}
+              onChange={(e) =>
+                onCambiarEstado(reporte.id, e.target.value)
+              }
+              style={{
+                flex: 1.2,
+                border: "none",
+                background: "transparent",
+                fontSize: 12.5,
+                fontWeight: 600,
+                color: "#4A4A47",
+                textAlign: "center",
+                cursor: "pointer",
+              }}
+            >
+              {Object.entries(ESTADOS).map(([k, v]) => (
+                <option key={k} value={k}>
+                  Marcar: {v.label}
+                </option>
+              ))}
+            </select>
+          )}
 
-        {reporte.estado !== "reunido" && (
-          <a
-            href={`https://wa.me/57${TELEFONO_REUNIDO}?text=${waReunidoMsg}`}
-            target="_blank"
-            rel="noreferrer"
-            title="Avisar que la mascota ya está en casa"
-            style={{
-              flex: 1.2,
-              textAlign: "center",
-              padding: "9px 0",
-              fontSize: 12.5,
-              fontWeight: 700,
-              color: "#C0392B",
-              textDecoration: "none",
-              display: "flex",
-              justifyContent: "center",
-              gap: 5,
-              alignItems: "center",
-              borderRight: "1px solid #EFEDE6",
-            }}
-          >
-            <Heart size={13} />
-            Ya está en casa
-          </a>
-        )}
-
-        {session && (
-          <select
-            value={reporte.estado}
-            onChange={(e) =>
-              onCambiarEstado(reporte.id, e.target.value)
-            }
-            style={{
-              flex: 1.2,
-              border: "none",
-              background: "transparent",
-              fontSize: 12.5,
-              fontWeight: 600,
-              color: "#4A4A47",
-              textAlign: "center",
-              cursor: "pointer",
-            }}
-          >
-            {Object.entries(ESTADOS).map(([k, v]) => (
-              <option key={k} value={k}>
-                Marcar: {v.label}
-              </option>
-            ))}
-          </select>
-        )}
-
-        {session && (
-          <button
-            onClick={() => onBorrar(reporte.id)}
-            title="Eliminar reporte"
-            style={{
-              flex: 0.6,
-              border: "none",
-              background: "transparent",
-              color: "#B4472E",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 4,
-              borderLeft: "1px solid #EFEDE6",
-            }}
-          >
-            <Trash2 size={15} />
-          </button>
-        )}
+          {session && (
+            <button
+              onClick={() => onBorrar(reporte.id)}
+              title="Eliminar reporte"
+              style={{
+                flex: 0.6,
+                border: "none",
+                background: "transparent",
+                color: "#B4472E",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 4,
+                borderLeft: "1px solid #EFEDE6",
+              }}
+            >
+              <Trash2 size={15} />
+            </button>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
