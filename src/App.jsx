@@ -7,7 +7,6 @@ import {
   MapPin,
   Phone,
   MessageCircle,
-  Plus,
   X,
   Home,
   PawPrint,
@@ -27,6 +26,7 @@ import {
   Footer,
   Card,
   VisorFoto,
+  BotonReportar,
   FormularioAlbergue,
   FormularioAvistamiento,
   FormularioLogin,
@@ -1054,35 +1054,9 @@ export default function App() {
 
       {/* Botón reportar */}
 
-      <button
-        onClick={() =>
-          setShowForm(true)
-        }
-        style={{
-          position: "fixed",
-          bottom: 20,
-          right: 20,
-          background: "#1F3A34",
-          color: "#fff",
-          border: "none",
-          borderRadius: 999,
-          padding:
-            "13px 18px",
-          display: "flex",
-          alignItems:
-            "center",
-          gap: 6,
-          fontSize: 14,
-          fontWeight: 700,
-          boxShadow:
-            "0 4px 14px rgba(0,0,0,0.25)",
-          cursor: "pointer",
-        }}
-      >
-        <Plus size={18} />
-
-        Reportar
-      </button>
+      <BotonReportar
+        onClick={() => setShowForm(true)}
+      />
 
 
       <Footer

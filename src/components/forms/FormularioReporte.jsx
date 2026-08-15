@@ -300,6 +300,10 @@ function FormularioReporte({
                   Perdido — busco a mi mascota
                 </option>
 
+                <option value="avistado">
+                  Avistamiento — Lo vi pero no lo tengo conmigo
+                </option>
+
                 <option value="en_albergue">
                   Está en el albergue temporal
                 </option>
@@ -619,16 +623,18 @@ function FormularioReporte({
           </div>
 
           <input
+            type="tel"
             value={form.telefono}
             onChange={(e) =>
               set(
                 "telefono",
-                e.target.value
+                e.target.value.replace(/\D/g, "")
               )
             }
             style={inputStyle}
             placeholder="Ej: 3001234567"
             inputMode="tel"
+            pattern="[0-9]*"
             required
           />
         </div>
