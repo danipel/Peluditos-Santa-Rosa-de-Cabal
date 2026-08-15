@@ -920,9 +920,7 @@ export default function App() {
         >
           {[
             "todos",
-            "perdido",
-            "en_albergue",
-            "reunido",
+            ...Object.keys(ESTADOS),
           ].map((t) => (
             <button
               key={t}
