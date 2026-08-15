@@ -3,6 +3,7 @@ import {
   fetchReportes,
   createReporte,
   updateEstadoReporte,
+  deleteReporte,
   subscribeReportesRealtime,
 } from "../services/reportesService";
 
@@ -61,6 +62,15 @@ export function useReportes() {
     }
   };
 
+  const borrarReporte = async (id) => {
+    try {
+      await deleteReporte(id);
+      await cargarReportes();
+    } catch (err) {
+      setError("No se pudo eliminar el reporte.");
+    }
+  };
+
   const coincidencias = useCallback(
     (reporte) => {
       if (reporte.estado === "reunido") return [];
@@ -107,6 +117,7 @@ export function useReportes() {
     setBusqueda,
     agregarReporte,
     cambiarEstado,
+    borrarReporte,
     coincidencias,
     cargarReportes,
   };

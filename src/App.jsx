@@ -373,6 +373,55 @@ export default function App() {
   }
 
   // ---------------------------------------------------------
+  // Borrar reporte (solo admin)
+  // ---------------------------------------------------------
+
+  async function borrarReporte(id) {
+    if (
+      !window.confirm(
+        "¿Seguro que deseas eliminar este reporte? Esta acción no se puede deshacer."
+      )
+    ) {
+      return;
+    }
+
+    const { error: avistamientosError } = await supabase
+      .from("avistamientos")
+      .delete()
+      .eq("reporte_id", id);
+
+    if (avistamientosError) {
+      setError(
+        "No se pudo eliminar el reporte."
+      );
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("reportes")
+      .delete()
+      .eq("id", id)
+      .select();
+
+    if (error) {
+      setError(
+        "No se pudo eliminar el reporte."
+      );
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      setError(
+        "No se pudo eliminar: falta la política RLS de DELETE en Supabase."
+      );
+      return;
+    }
+
+    await cargarReportes();
+    await cargarAvistamientos();
+  }
+
+  // ---------------------------------------------------------
   // Guardar información del albergue
   // ---------------------------------------------------------
 
@@ -982,6 +1031,9 @@ export default function App() {
                   )}
                   onCambiarEstado={
                     cambiarEstado
+                  }
+                  onBorrar={
+                    borrarReporte
                   }
                   onAgregarAvistamiento={() =>
                     setAvistamientoDe(

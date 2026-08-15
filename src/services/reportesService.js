@@ -67,6 +67,32 @@ export async function updateEstadoReporte(id, estado) {
 }
 
 /**
+ * Elimina un reporte y sus avistamientos asociados.
+ */
+export async function deleteReporte(id) {
+  const { error: avistamientosError } = await supabase
+    .from("avistamientos")
+    .delete()
+    .eq("reporte_id", id);
+
+  if (avistamientosError) throw avistamientosError;
+
+  const { data, error } = await supabase
+    .from("reportes")
+    .delete()
+    .eq("id", id)
+    .select();
+
+  if (error) throw error;
+
+  if (!data || data.length === 0) {
+    throw new Error(
+      "No se pudo eliminar: falta la política RLS de DELETE en Supabase."
+    );
+  }
+}
+
+/**
  * Suscribe un listener a cambios en tiempo real en la tabla 'reportes'.
  */
 export function subscribeReportesRealtime(onUpdate) {

@@ -5,6 +5,7 @@ import {
   PawPrint,
   AlertCircle,
   Eye,
+  Trash2,
 } from "lucide-react";
 
 import { ESTADOS, ESPECIES } from "../../constants/mascotas";
@@ -15,6 +16,7 @@ export default function Card({
   avistamientos,
   coincidencias,
   onCambiarEstado,
+  onBorrar,
   onAgregarAvistamiento,
   onAmpliarFoto,
 }) {
@@ -330,6 +332,27 @@ export default function Card({
               </option>
             ))}
           </select>
+        )}
+
+        {session && (
+          <button
+            onClick={() => onBorrar(reporte.id)}
+            title="Eliminar reporte"
+            style={{
+              flex: 0.6,
+              border: "none",
+              background: "transparent",
+              color: "#B4472E",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 4,
+              borderLeft: "1px solid #EFEDE6",
+            }}
+          >
+            <Trash2 size={15} />
+          </button>
         )}
       </div>
     </div>
