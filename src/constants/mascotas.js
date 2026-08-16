@@ -11,3 +11,5 @@ export const ESPECIES = {
 };
 
 export const WHATSAPP_AYUDA = "3117306947";
+
+export const INSTAGRAM_BRIGADA = "https://www.instagram.com/brigadastr";

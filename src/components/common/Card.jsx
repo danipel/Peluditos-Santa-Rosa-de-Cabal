@@ -64,7 +64,7 @@ const estilos = `
       height: auto;
     }
     .card-imagen {
-      height: 200px;
+      height: clamp(240px, 40vh, 480px);
       flex: none;
     }
     .card-info-wrapper {
