@@ -156,7 +156,8 @@ src/
 | Ruta | Componente | Descripción |
 |---|---|---|
 | `/home` | `home.jsx` | Pantalla de selección de ciudad |
-| `/` | `App.jsx` | Listado y filtros de reportes (requiere `?ciudad=` en la URL) |
+| `/` | `Root.jsx` | Redirige a `/home` |
+| `/:ciudad` | `App.jsx` | Listado y filtros de reportes (slug de ciudad, ej. `/pereira`, `/todos`) |
 
 Cada componente visual (`*.jsx`) vive acompañado de su archivo de estilos (`*.css`) en la misma carpeta. Los componentes de `components/forms/` usan las clases compartidas de `src/styles/forms.css` en lugar de un CSS propio.
 

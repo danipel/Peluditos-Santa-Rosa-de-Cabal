@@ -63,7 +63,8 @@ src/
 | Ruta | Componente | Descripción |
 |---|---|---|
 | `/home` | `home.jsx` | Selección de ciudad |
-| `/?ciudad=<nombre>` | `App.jsx` | Listado y filtros de reportes |
+| `/` | `Root.jsx` | Redirige a `/home` |
+| `/:ciudad` | `App.jsx` | Listado y filtros de reportes (ej. `/pereira`, `/santa-rosa-de-cabal`, `/todos`) |
 
 > Nota: la capa de datos vive en `services/` (llamadas a Supabase) y la lógica de estado en `hooks/`. `App.jsx` y `home.jsx` orquestan componentes y consumen esos hooks (no acceden a Supabase directamente).
 

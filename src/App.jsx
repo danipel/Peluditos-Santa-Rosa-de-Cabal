@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import {
   useNavigate,
-  useSearchParams,
+  useParams,
+  useLocation,
 } from "react-router-dom";
 import {
   Home,
@@ -29,17 +30,16 @@ import {
 } from "./components/index.js";
 
 import { ESTADOS, ESPECIES } from "./constants/mascotas.js";
+import {
+  CIUDADES,
+  ciudadPorSlug,
+  slugDeCiudad,
+} from "./constants/ciudades.js";
 import { useSession } from "./hooks/useSession";
 import { useReportes } from "./hooks/useReportes";
 import { useAlbergue } from "./hooks/useAlbergue";
 
 import "./App.css";
-
-const ciudades = [
-  "Pereira",
-  "Dosquebradas",
-  "Santa Rosa de Cabal",
-];
 
 const SITE_URL = import.meta.env.VITE_SITE_URL || "";
 
@@ -63,8 +63,11 @@ function obtenerPaginas(total, actual) {
 
 export default function App() {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const ciudad = searchParams.get("ciudad");
+  const { ciudad: ciudadSlug } = useParams();
+  const location = useLocation();
+  const ciudadInfo = ciudadPorSlug(ciudadSlug);
+  const ciudad = ciudadInfo ? ciudadInfo.valor : null;
+  const ciudadNombre = ciudadInfo ? ciudadInfo.nombre : "";
 
   const [showForm, setShowForm] = useState(false);
   const [showAlbergueForm, setShowAlbergueForm] = useState(false);
@@ -122,7 +125,7 @@ export default function App() {
   }, [paginaActual]);
 
   // ---------------------------------------------------------
-  // Si entran directamente a "/" sin ciudad
+  // Si entran directamente a una ruta sin ciudad válida
   // ---------------------------------------------------------
 
   useEffect(() => {
@@ -132,18 +135,15 @@ export default function App() {
   }, [ciudad, navigate]);
 
   // ---------------------------------------------------------
-  // Auto-apertura del formulario vía ?reportar=1 (CTA de Home)
+  // Auto-apertura del formulario vía estado de navegación (CTA de Home)
   // ---------------------------------------------------------
 
   useEffect(() => {
-    if (searchParams.get("reportar") === "1") {
+    if (location.state?.reportar) {
       setShowForm(true);
-
-      const nuevos = new URLSearchParams(searchParams);
-      nuevos.delete("reportar");
-      setSearchParams(nuevos, { replace: true });
+      navigate(".", { replace: true, state: null });
     }
-  }, [searchParams, setSearchParams]);
+  }, [location, navigate]);
 
   // ---------------------------------------------------------
   // Acciones que combinan lógica del hook con estado de UI
@@ -188,14 +188,14 @@ export default function App() {
         data={{
           "@context": "https://schema.org",
           "@type": "ItemList",
-          name: `Mascotas reportadas en ${ciudad || "Risaralda"}`,
+          name: `Mascotas reportadas en ${ciudadNombre || "Risaralda"}`,
           numberOfItems: filtrados.length,
           itemListElement: filtrados.map((r, i) => ({
             "@type": "ListItem",
             position: i + 1,
             name: r.nombre || ESPECIES[r.especie] || r.especie,
             image: r.foto_url || undefined,
-            url: `${SITE_URL}/?ciudad=${encodeURIComponent(
+            url: `${SITE_URL}/${slugDeCiudad(
               ciudad || ""
             )}#reporte-${r.id}`,
           })),
@@ -214,7 +214,7 @@ export default function App() {
         <div className="app-encabezado">
           <div>
             <h1 className="app-titulo">
-              Reportes de {ciudad}
+              Reportes de {ciudadNombre}
             </h1>
 
             <div className="app-subtitulo">
@@ -461,7 +461,7 @@ export default function App() {
         {!loading && (
           <section className="app-resumen">
             <h2 className="app-resumen-titulo">
-              Resumen en {ciudad}
+              Resumen en {ciudadNombre}
             </h2>
 
             <p className="app-resumen-texto">
@@ -474,7 +474,7 @@ export default function App() {
 
             <table className="app-tabla-resumen">
               <caption>
-                Mascotas por estado en {ciudad}
+                Mascotas por estado en {ciudadNombre}
               </caption>
 
               <thead>
@@ -509,7 +509,7 @@ export default function App() {
 
             <table className="app-tabla-resumen">
               <caption>
-                Mascotas por especie en {ciudad}
+                Mascotas por especie en {ciudadNombre}
               </caption>
 
               <thead>
@@ -566,7 +566,8 @@ export default function App() {
         <FormularioReporte
           onClose={() => setShowForm(false)}
           onSave={handleGuardarReporte}
-          ciudades={ciudades}
+          ciudades={CIUDADES}
+          ciudadActual={ciudad}
         />
       )}
 
@@ -575,6 +576,8 @@ export default function App() {
           initial={albergues[0]}
           onClose={() => setShowAlbergueForm(false)}
           onSave={handleGuardarAlbergue}
+          ciudad={ciudad}
+          ciudadEtiqueta={ciudadNombre}
         />
       )}
 

@@ -42,30 +42,28 @@ export default function Home() {
     const tarjetas = [
         {
             titulo: "Pereira",
-            url: "Pereira",
+            slug: "pereira",
             imagen: "/images/pereira.jpg",
         },
         {
             titulo: "Dosquebradas",
-            url: "Dosquebradas",
+            slug: "dosquebradas",
             imagen: "/images/dosquebradas.jpg",
         },
         {
             titulo: "Santa Rosa de Cabal",
-            url: "Sta Rosa",
+            slug: "santa-rosa-de-cabal",
             imagen: "/images/santa-rosa.jpg",
         },
         {
             titulo: "Todos",
-            url: "Todos",
+            slug: "todos",
             imagen: "/images/todos.png",
         },
     ];
 
-    function seleccionarCiudad(ciudad) {
-        navigate(
-            `/?ciudad=${encodeURIComponent(ciudad)}`
-        );
+    function seleccionarCiudad(slug) {
+        navigate(`/${slug}`);
     }
 
     return (
@@ -79,7 +77,7 @@ export default function Home() {
                         "@type": "ListItem",
                         position: i + 1,
                         name: t.titulo,
-                        url: `${SITE_URL}/?ciudad=${encodeURIComponent(t.url)}`,
+                        url: `${SITE_URL}/${t.slug}`,
                     })),
                 }}
             />
@@ -111,9 +109,11 @@ export default function Home() {
                     texto="Publícala gratis y la comunidad de Risaralda te ayudará a encontrarla."
                     etiquetaBoton="Reportar mascota"
                     onReportar={() =>
-                        navigate("/?ciudad=Todos&reportar=1")
+                        navigate("/todos", {
+                            state: { reportar: true },
+                        })
                     }
-                    onVerReportes={() => navigate("/?ciudad=Todos")}
+                    onVerReportes={() => navigate("/todos")}
                 />
 
                 <p className="home-resumen">
@@ -147,7 +147,7 @@ export default function Home() {
                                 imagen={tarjeta.imagen}
                                 onClick={() =>
                                     seleccionarCiudad(
-                                        tarjeta.url
+                                        tarjeta.slug
                                     )
                                 }
                             />
@@ -158,7 +158,7 @@ export default function Home() {
 
             <Footer
                 onInicio={() => navigate("/home")}
-                onReportar={() => navigate("/?ciudad=Todos")}
+                onReportar={() => navigate("/todos")}
                 onCambiarCiudad={() => navigate("/home")}
             />
 

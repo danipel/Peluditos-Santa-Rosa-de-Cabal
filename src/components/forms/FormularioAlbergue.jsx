@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import Modal from "../common/Modal";
 
-function FormularioAlbergue({ initial, onClose, onSave }) {
-    const [searchParams] = useSearchParams();
-    const ciudad = searchParams.get("ciudad");
-
+function FormularioAlbergue({
+    initial,
+    onClose,
+    onSave,
+    ciudad = "",
+    ciudadEtiqueta = "",
+}) {
     const [form, setForm] = useState({
         nombre: initial?.nombre || "",
         direccion: initial?.direccion || "",
@@ -74,7 +76,7 @@ function FormularioAlbergue({ initial, onClose, onSave }) {
 
                     <input
                         readOnly={true}
-                        value={form.ciudad}
+                        value={ciudadEtiqueta || form.ciudad}
                         className="campo-input"
                     />
                 </div>

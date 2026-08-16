@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 import { ESTADOS, ESPECIES, WHATSAPP_AYUDA } from "../../constants/mascotas";
+import { nombreDeCiudad } from "../../constants/ciudades";
 import "./Card.css";
 
 export default function Card({
@@ -158,8 +159,8 @@ export default function Card({
             </div>
 
             <div className="card-sector">
-              <MapPin size={12} />
-              {reporte.sector + " - " + reporte.ciudad}
+            <MapPin size={12} />
+            {reporte.sector + " - " + nombreDeCiudad(reporte.ciudad)}
             </div>
 
             {reporte.descripcion && (

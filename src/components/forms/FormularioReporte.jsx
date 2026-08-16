@@ -1,16 +1,20 @@
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import Modal from "../common/Modal";
 
-function FormularioReporte({ onClose, onSave, ciudades = [] }) {
-  const [searchParams] = useSearchParams();
+function FormularioReporte({
+  onClose,
+  onSave,
+  ciudades = [],
+  ciudadActual = "",
+}) {
+  const esTodasLasCiudades = ciudadActual === "Todos";
 
-  const ciudadUrl = searchParams.get("ciudad") || "";
+  const ciudadSeleccionada = esTodasLasCiudades ? "" : ciudadActual;
 
-  const ciudadSeleccionada =
-    ciudadUrl && ciudadUrl !== "Todos" ? ciudadUrl : "";
-
-  const esTodasLasCiudades = ciudadUrl === "Todos";
+  const ciudadEtiqueta = esTodasLasCiudades
+    ? ""
+    : (ciudades.find((c) => c.valor === ciudadActual)?.nombre ||
+      ciudadActual);
 
   const [form, setForm] = useState({
     ciudad: ciudadSeleccionada,
@@ -135,9 +139,9 @@ function FormularioReporte({ onClose, onSave, ciudades = [] }) {
               >
                 <option value="">Selecciona una ciudad</option>
 
-                {ciudades.map((nombreCiudad) => (
-                  <option key={nombreCiudad} value={nombreCiudad}>
-                    {nombreCiudad}
+                {ciudades.map((c) => (
+                  <option key={c.valor} value={c.valor}>
+                    {c.nombre}
                   </option>
                 ))}
               </select>
@@ -149,7 +153,7 @@ function FormularioReporte({ onClose, onSave, ciudades = [] }) {
           ) : (
             <>
               <input
-                value={form.ciudad}
+                value={ciudadEtiqueta}
                 className="campo-input campo-input-solo-lectura"
                 placeholder="Ciudad"
                 required
