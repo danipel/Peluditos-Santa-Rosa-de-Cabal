@@ -12,12 +12,72 @@ import {
 import { ESTADOS, ESPECIES, WHATSAPP_AYUDA } from "../../constants/mascotas";
 
 const estilos = `
-  .card-imagen {
-    height: 160px;
+  .reporte-card {
+    min-height: 60vh;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid #DAD6CC;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   }
+
+  .card-imagen {
+    height: 50vh;
+    flex: 0 0 50vh;
+    width: 100%;
+    background: #EFEDE6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .card-info-wrapper {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #fff;
+  }
+
+  .card-info-scroll {
+    flex: 1 1 auto;
+    padding: 12px;
+  }
+
+  .card-acciones {
+    flex-shrink: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border-top: 1px solid #EFEDE6;
+    background: #fff;
+    margin-top: auto;
+  }
+
   @media (min-width: 640px) {
+    .reporte-card {
+      min-height: unset;
+      height: auto;
+    }
     .card-imagen {
       height: 200px;
+      flex: none;
+    }
+    .card-info-wrapper {
+      height: auto;
+      flex: 1 1 auto;
+      justify-content: flex-start;
+    }
+    .card-info-scroll {
+      flex: 1 1 auto;
+      padding: 12px;
+    }
+    .card-acciones {
+      margin-top: auto;
     }
   }
 `;
@@ -153,27 +213,11 @@ export default function Card({
     <>
       <style>{estilos}</style>
 
-      <div
-        style={{
-          background: "#fff",
-          border: "1px solid #DAD6CC",
-          borderRadius: 12,
-          overflow: "hidden",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+      <div className="reporte-card">
         <div
           onClick={reporte.foto_url ? onAmpliarFoto : undefined}
           className="card-imagen"
           style={{
-            width: "100%",
-            background: "#EFEDE6",
-            flexShrink: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            overflow: "hidden",
             cursor: reporte.foto_url ? "pointer" : "default",
           }}
         >
@@ -192,190 +236,182 @@ export default function Card({
           )}
         </div>
 
-        <div
-          style={{
-            flex: 1,
-            minWidth: 0,
-            padding: 12,
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              gap: 6,
-            }}
-          >
+        <div className="card-info-wrapper">
+          <div className="card-info-scroll">
             <div
               style={{
-                fontWeight: 700,
-                fontSize: 14.5,
+                display: "flex",
+                justifyContent: "space-between",
+                gap: 6,
               }}
             >
-              {reporte.nombre ? reporte.nombre : especie}
+              <div
+                style={{
+                  fontWeight: 700,
+                  fontSize: 14.5,
+                }}
+              >
+                {reporte.nombre ? reporte.nombre : especie}
+
+                <span
+                  style={{
+                    fontWeight: 400,
+                    color: "#8A8A85",
+                    fontSize: 12.5,
+                  }}
+                >
+                  {reporte.nombre ? ` · ${especie}` : ""}
+                </span>
+              </div>
 
               <span
                 style={{
-                  fontWeight: 400,
-                  color: "#8A8A85",
-                  fontSize: 12.5,
+                  fontSize: 11,
+                  fontWeight: 700,
+                  color: estado.color,
+                  background: estado.bg,
+                  padding: "2px 8px",
+                  borderRadius: 999,
+                  whiteSpace: "nowrap",
                 }}
               >
-                {reporte.nombre ? ` · ${especie}` : ""}
+                {estado.label}
               </span>
             </div>
 
-            <span
+            <div
               style={{
-                fontSize: 11,
-                fontWeight: 700,
-                color: estado.color,
-                background: estado.bg,
-                padding: "2px 8px",
-                borderRadius: 999,
-                whiteSpace: "nowrap",
+                fontSize: 13,
+                color: "#4A4A47",
+                marginTop: 3,
               }}
             >
-              {estado.label}
-            </span>
-          </div>
+              {reporte.color}
 
-          <div
-            style={{
-              fontSize: 13,
-              color: "#4A4A47",
-              marginTop: 3,
-            }}
-          >
-            {reporte.color}
+              {reporte.tamano ? ` · ${reporte.tamano}` : ""}
+            </div>
 
-            {reporte.tamano ? ` · ${reporte.tamano}` : ""}
-          </div>
-
-          <div
-            style={{
-              fontSize: 12.5,
-              color: "#8A8A85",
-              display: "flex",
-              alignItems: "center",
-              gap: 3,
-              marginTop: 3,
-            }}
-          >
-            <MapPin size={12} />
-            {reporte.sector + " - " + reporte.ciudad}
-          </div>
-
-          {reporte.descripcion && (
             <div
               style={{
                 fontSize: 12.5,
-                color: "#5B5B57",
-                marginTop: 4,
-              }}
-            >
-              {reporte.descripcion}
-            </div>
-          )}
-        </div>
-
-        {avistamientos.length > 0 && (
-          <div
-            style={{
-              padding: "0 12px 10px",
-              display: "flex",
-              flexDirection: "column",
-              gap: 4,
-            }}
-          >
-            <div
-              style={{
-                fontSize: 11.5,
-                fontWeight: 700,
-                color: "#8A6D00",
+                color: "#8A8A85",
                 display: "flex",
                 alignItems: "center",
-                gap: 4,
+                gap: 3,
+                marginTop: 3,
               }}
             >
-              <Eye size={12} />
-
-              {avistamientos.length} avistamiento
-              {avistamientos.length > 1 ? "s" : ""}
+              <MapPin size={12} />
+              {reporte.sector + " - " + reporte.ciudad}
             </div>
 
-            {avistamientos.slice(0, 3).map((a) => (
+            {reporte.descripcion && (
               <div
-                key={a.id}
                 style={{
-                  fontSize: 12,
-                  color: "#6B6B66",
-                  paddingLeft: 16,
+                  fontSize: 12.5,
+                  color: "#5B5B57",
+                  marginTop: 4,
                 }}
               >
-                {a.sector}
-                {a.hora ? ` · ${a.hora}` : ""}
-                {a.descripcion ? ` — ${a.descripcion}` : ""}
+                {reporte.descripcion}
+              </div>
+            )}
+
+            {avistamientos.length > 0 && (
+              <div
+                style={{
+                  paddingTop: 8,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 4,
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 11.5,
+                    fontWeight: 700,
+                    color: "#8A6D00",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 4,
+                  }}
+                >
+                  <Eye size={12} />
+
+                  {avistamientos.length} avistamiento
+                  {avistamientos.length > 1 ? "s" : ""}
+                </div>
+
+                {avistamientos.slice(0, 3).map((a) => (
+                  <div
+                    key={a.id}
+                    style={{
+                      fontSize: 12,
+                      color: "#6B6B66",
+                      paddingLeft: 16,
+                    }}
+                  >
+                    {a.sector}
+                    {a.hora ? ` · ${a.hora}` : ""}
+                    {a.descripcion ? ` — ${a.descripcion}` : ""}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {coincidencias.length > 0 && (
+              <div
+                style={{
+                  background: "#FAF1D6",
+                  padding: "8px 12px",
+                  fontSize: 12.5,
+                  color: "#7A5F00",
+                  display: "flex",
+                  gap: 6,
+                  borderRadius: 6,
+                  marginTop: 8,
+                }}
+              >
+                <AlertCircle
+                  size={14}
+                  style={{
+                    marginTop: 1,
+                    flexShrink: 0,
+                  }}
+                />
+
+                <span>
+                  Hay actividad (
+                  {avistamientos.length ? "avistamientos" : "reportes"}
+                  ) en el mismo sector — revisa si coincide.
+                </span>
+              </div>
+            )}
+          </div>
+
+          <div className="card-acciones">
+            {acciones.map((accion, i) => (
+              <div
+                key={i}
+                style={{
+                  display: "flex",
+                  borderRight:
+                    i % 2 === 0
+                      ? "1px solid #EFEDE6"
+                      : "none",
+                  borderTop:
+                    i >= 2
+                      ? "1px solid #EFEDE6"
+                      : "none",
+                }}
+              >
+                {accion}
               </div>
             ))}
           </div>
-        )}
-
-        {coincidencias.length > 0 && (
-          <div
-            style={{
-              background: "#FAF1D6",
-              padding: "8px 12px",
-              fontSize: 12.5,
-              color: "#7A5F00",
-              display: "flex",
-              gap: 6,
-            }}
-          >
-            <AlertCircle
-              size={14}
-              style={{
-                marginTop: 1,
-                flexShrink: 0,
-              }}
-            />
-
-            <span>
-              Hay actividad (
-              {avistamientos.length ? "avistamientos" : "reportes"}
-              ) en el mismo sector — revisa si coincide.
-            </span>
-          </div>
-        )}
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            borderTop: "1px solid #EFEDE6",
-            marginTop: "auto",
-          }}
-        >
-          {acciones.map((accion, i) => (
-            <div
-              key={i}
-              style={{
-                display: "flex",
-                borderRight:
-                  i % 2 === 0
-                    ? "1px solid #EFEDE6"
-                    : "none",
-                borderTop:
-                  i >= 2
-                    ? "1px solid #EFEDE6"
-                    : "none",
-              }}
-            >
-              {accion}
-            </div>
-          ))}
         </div>
       </div>
     </>
   );
 }
+
