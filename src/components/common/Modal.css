@@ -42,7 +42,13 @@
 }
 
 .modal-close-btn {
+  cursor: pointer;
+  color: #8a8a85;
   transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.modal-back-btn {
+  cursor: pointer;
 }
 
 .modal-close-btn:hover {

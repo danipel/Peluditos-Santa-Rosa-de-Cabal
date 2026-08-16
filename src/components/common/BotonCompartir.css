@@ -1,0 +1,143 @@
+.boton-compartir-contenedor {
+  position: fixed;
+  bottom: 92px;
+  right: 20px;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.boton-compartir-fila {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.boton-compartir {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-superficie);
+  color: var(--color-acento);
+  border: 1px solid var(--color-acento);
+  border-radius: 999px;
+  box-shadow: 0 6px 18px rgba(31, 58, 52, 0.25);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.boton-compartir--exito {
+  background: var(--color-acento);
+  color: #ffffff;
+}
+
+.boton-compartir:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(31, 58, 52, 0.3);
+}
+
+.boton-compartir:active {
+  transform: translateY(0);
+}
+
+.boton-compartir:focus-visible {
+  outline: 2px solid var(--color-acento);
+  outline-offset: 3px;
+}
+
+.boton-compartir-menu {
+  background: var(--color-superficie);
+  border: 1px solid #e0ddd5;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(31, 58, 52, 0.22);
+  padding: 8px;
+  min-width: 210px;
+  animation: boton-compartir-aparece 0.15s ease;
+}
+
+.boton-compartir-menu-titulo {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-texto-tenue);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 6px 10px 8px;
+}
+
+.boton-compartir-opcion {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primario);
+  text-align: left;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition: background 0.12s ease;
+}
+
+.boton-compartir-opcion:hover {
+  background: #f2f1ec;
+}
+
+.boton-compartir-opcion:focus-visible {
+  outline: 2px solid var(--color-acento);
+  outline-offset: -2px;
+}
+
+.boton-compartir-toast {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 999px;
+  box-shadow: 0 6px 18px rgba(31, 58, 52, 0.25);
+  white-space: nowrap;
+  animation: boton-compartir-aparece 0.2s ease;
+}
+
+.boton-compartir-toast--exito {
+  background: var(--color-acento);
+}
+
+.boton-compartir-toast--error {
+  background: var(--color-peligro);
+}
+
+@keyframes boton-compartir-aparece {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boton-compartir {
+    transition: none;
+  }
+  .boton-compartir-toast,
+  .boton-compartir-menu {
+    animation: none;
+  }
+  .boton-compartir-opcion {
+    transition: none;
+  }
+}

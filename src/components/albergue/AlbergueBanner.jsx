@@ -1,60 +1,39 @@
 import { Home } from "lucide-react";
+import "./AlbergueBanner.css";
 
 export default function AlbergueBanner({ albergue, onEditar }) {
   const tieneDatos = Boolean(albergue?.nombre || albergue?.direccion);
 
   return (
-    <div
-      style={{
-        background: "#FFFFFF",
-        border: "1px solid #DAD6CC",
-        borderLeft: "4px solid #1F6E5C",
-        borderRadius: 10,
-        padding: "12px 14px",
-        marginBottom: 16,
-        display: "flex",
-        justifyContent: "space-between",
-        gap: 10,
-      }}
-    >
-      <div style={{ display: "flex", gap: 10 }}>
+    <div className="albergue-banner">
+      <div className="albergue-banner-contenido">
         <Home
           size={18}
           color="#1F6E5C"
-          style={{ marginTop: 2, flexShrink: 0 }}
+          className="albergue-banner-icono"
         />
         <div>
-          <div style={{ fontWeight: 700, fontSize: 13.5 }}>
+          <div className="albergue-banner-titulo">
             Punto de acopio / albergue temporal
           </div>
           {tieneDatos ? (
-            <div style={{ fontSize: 13, color: "#4A4A47", marginTop: 2 }}>
+            <div className="albergue-banner-datos">
               {albergue.nombre && <div>{albergue.nombre}</div>}
               {albergue.direccion && <div>{albergue.direccion}</div>}
               {albergue.horario && (
-                <div style={{ opacity: 0.8 }}>
+                <div className="albergue-banner-horario">
                   Horario: {albergue.horario}
                 </div>
               )}
             </div>
           ) : (
-            <div style={{ fontSize: 13, color: "#8A8A85", marginTop: 2 }}>
+            <div className="albergue-banner-vacio">
               Aún no se ha registrado la ubicación
             </div>
           )}
         </div>
       </div>
-      <button
-        onClick={onEditar}
-        style={{
-          fontSize: 12,
-          color: "#1F6E5C",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          fontWeight: 600,
-        }}
-      >
+      <button onClick={onEditar} className="albergue-banner-editar">
         Editar
       </button>
     </div>

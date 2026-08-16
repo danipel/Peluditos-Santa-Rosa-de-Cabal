@@ -1,0 +1,226 @@
+.reporte-card {
+  min-height: 60vh;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.card-imagen {
+  height: 50vh;
+  flex: 0 0 50vh;
+  width: 100%;
+  background: var(--color-borde-suave);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.card-imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-imagen--clicable {
+  cursor: pointer;
+}
+
+.card-info-wrapper {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--color-superficie);
+}
+
+.card-info-scroll {
+  flex: 1 1 auto;
+  padding: 12px;
+}
+
+.card-acciones {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 1px solid var(--color-borde-suave);
+  background: var(--color-superficie);
+  margin-top: auto;
+}
+
+.card-acciones > * {
+  display: flex;
+}
+
+.card-acciones > *:nth-child(odd) {
+  border-right: 1px solid var(--color-borde-suave);
+}
+
+.card-acciones > *:nth-child(n + 3) {
+  border-top: 1px solid var(--color-borde-suave);
+}
+
+.card-cabecera {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.card-nombre {
+  font-weight: 700;
+  font-size: 14.5px;
+}
+
+.card-nombre-especie {
+  font-weight: 400;
+  color: var(--color-texto-tenue);
+  font-size: 12.5px;
+}
+
+.card-etiqueta-estado {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.card-dato {
+  font-size: 13px;
+  color: var(--color-texto-suave);
+  margin-top: 3px;
+}
+
+.card-sector {
+  font-size: 12.5px;
+  color: var(--color-texto-tenue);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 3px;
+}
+
+.card-descripcion {
+  font-size: 12.5px;
+  color: #5b5b57;
+  margin-top: 4px;
+}
+
+.card-avistamientos {
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-avistamientos-titulo {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--color-advertencia);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.card-avistamiento {
+  font-size: 12px;
+  color: #6b6b66;
+  padding-left: 16px;
+}
+
+.card-coincidencia {
+  background: var(--color-advertencia-fondo);
+  padding: 8px 12px;
+  font-size: 12.5px;
+  color: var(--color-advertencia-texto);
+  display: flex;
+  gap: 6px;
+  border-radius: 6px;
+  margin-top: 8px;
+}
+
+.card-coincidencia-icono {
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+.card-accion {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 9px 4px;
+  text-decoration: none;
+  text-align: center;
+}
+
+.card-accion--fuerte {
+  font-weight: 700;
+}
+
+.card-accion--llamar {
+  color: #1f3a34;
+}
+
+.card-accion--whatsapp {
+  color: var(--color-acento);
+}
+
+.card-accion--avistamiento {
+  color: var(--color-advertencia);
+}
+
+.card-accion--casa {
+  color: #c0392b;
+}
+
+.card-accion--borrar {
+  color: var(--color-peligro);
+}
+
+.card-accion-select {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--color-texto-suave);
+  text-align: center;
+  cursor: pointer;
+  padding: 9px 4px;
+}
+
+@media (min-width: 640px) {
+  .reporte-card {
+    min-height: unset;
+    height: auto;
+  }
+  .card-imagen {
+    height: clamp(240px, 40vh, 480px);
+    flex: none;
+  }
+  .card-info-wrapper {
+    height: auto;
+    flex: 1 1 auto;
+    justify-content: flex-start;
+  }
+  .card-info-scroll {
+    flex: 1 1 auto;
+    padding: 12px;
+  }
+  .card-acciones {
+    margin-top: auto;
+  }
+}

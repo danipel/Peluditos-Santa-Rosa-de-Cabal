@@ -1,8 +1,5 @@
-import {
-    Heart,
-    PawPrint,
-    ExternalLink,
-} from "lucide-react";
+import { Heart, PawPrint } from "lucide-react";
+import "./Footer.css";
 
 export default function Footer({
     onInicio,
@@ -10,63 +7,20 @@ export default function Footer({
     onCambiarCiudad,
 }) {
     return (
-        <footer
-            style={{
-                marginTop: 40,
-                background: "#1F3A34",
-                color: "#FFFFFF",
-                padding: "32px 16px 20px",
-            }}
-        >
-            <div
-                style={{
-                    maxWidth: 720,
-                    margin: "0 auto",
-                }}
-            >
+        <footer className="site-footer">
+            <div className="site-footer-inner">
                 {/* Contenido principal */}
-
-                <div
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns:
-                            "minmax(0, 1.5fr) minmax(140px, 1fr)",
-                        gap: 32,
-                        paddingBottom: 28,
-                    }}
-                >
+                <div className="site-footer-grid">
                     {/* Información */}
-
                     <div>
-                        <div
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 8,
-                                marginBottom: 10,
-                            }}
-                        >
+                        <div className="site-footer-marca">
                             <PawPrint size={20} />
-
-                            <span
-                                style={{
-                                    fontSize: 17,
-                                    fontWeight: 700,
-                                }}
-                            >
+                            <span className="site-footer-marca-titulo">
                                 Apoyo comunitario
                             </span>
                         </div>
 
-                        <p
-                            style={{
-                                margin: 0,
-                                color: "#D6E0DC",
-                                fontSize: 13.5,
-                                lineHeight: 1.6,
-                                maxWidth: 420,
-                            }}
-                        >
+                        <p className="site-footer-descripcion">
                             Un espacio para ayudar a encontrar
                             mascotas perdidas, compartir
                             avistamientos y conectar a la comunidad.
@@ -74,69 +28,29 @@ export default function Footer({
                     </div>
 
                     {/* Enlaces */}
-
                     <div>
-                        <div
-                            style={{
-                                fontSize: 12,
-                                fontWeight: 700,
-                                textTransform: "uppercase",
-                                letterSpacing: 0.5,
-                                color: "#AFC5BE",
-                                marginBottom: 10,
-                            }}
-                        >
+                        <div className="site-footer-titulo-acciones">
                             Acciones
                         </div>
 
-                        <div
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: 8,
-                            }}
-                        >
+                        <div className="site-footer-acciones">
                             <button
                                 onClick={onInicio}
-                                style={{
-                                    padding: 0,
-                                    border: "none",
-                                    background: "none",
-                                    color: "#FFFFFF",
-                                    textAlign: "left",
-                                    fontSize: 13,
-                                    cursor: "pointer",
-                                }}
+                                className="site-footer-enlace"
                             >
                                 Inicio
                             </button>
 
                             <button
                                 onClick={onReportar}
-                                style={{
-                                    padding: 0,
-                                    border: "none",
-                                    background: "none",
-                                    color: "#FFFFFF",
-                                    textAlign: "left",
-                                    fontSize: 13,
-                                    cursor: "pointer",
-                                }}
+                                className="site-footer-enlace"
                             >
                                 Crear reporte
                             </button>
 
                             <button
                                 onClick={onCambiarCiudad}
-                                style={{
-                                    padding: 0,
-                                    border: "none",
-                                    background: "none",
-                                    color: "#FFFFFF",
-                                    textAlign: "left",
-                                    fontSize: 13,
-                                    cursor: "pointer",
-                                }}
+                                className="site-footer-enlace"
                             >
                                 Cambiar ciudad
                             </button>
@@ -145,63 +59,17 @@ export default function Footer({
                 </div>
 
                 {/* Apoyo al desarrollo */}
-
-                <div
-                    style={{
-                        borderTop:
-                            "1px solid rgba(255,255,255,0.12)",
-                        borderBottom:
-                            "1px solid rgba(255,255,255,0.12)",
-                        padding: "22px 0",
-                        marginBottom: 18,
-                    }}
-                >
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItems: "flex-start",
-                            justifyContent: "space-between",
-                            gap: 20,
-                            flexWrap: "wrap",
-                        }}
-                    >
-                        <div
-                            style={{
-                                flex: 1,
-                                minWidth: 240,
-                            }}
-                        >
-                            <div
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: 7,
-                                    marginBottom: 7,
-                                }}
-                            >
-                                <Heart
-                                    size={16}
-                                    color="#D6E0DC"
-                                />
-
-                                <span
-                                    style={{
-                                        fontSize: 14,
-                                        fontWeight: 700,
-                                    }}
-                                >
+                <div className="site-footer-apoyo">
+                    <div className="site-footer-apoyo-inner">
+                        <div className="site-footer-apoyo-columna">
+                            <div className="site-footer-apoyo-titulo-fila">
+                                <Heart size={16} color="#D6E0DC" />
+                                <span className="site-footer-apoyo-titulo">
                                     Apoya el desarrollo
                                 </span>
                             </div>
 
-                            <p
-                                style={{
-                                    margin: 0,
-                                    color: "#C3D2CD",
-                                    fontSize: 12.5,
-                                    lineHeight: 1.6,
-                                }}
-                            >
+                            <p className="site-footer-apoyo-texto">
                                 Este proyecto es desarrollado y
                                 mantenido de forma independiente.
                                 Si quieres contribuir a que siga
@@ -213,31 +81,12 @@ export default function Footer({
                 </div>
 
                 {/* Parte inferior */}
-
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        gap: 12,
-                        flexWrap: "wrap",
-                    }}
-                >
-                    <div
-                        style={{
-                            color: "#AFC5BE",
-                            fontSize: 12,
-                        }}
-                    >
+                <div className="site-footer-inferior">
+                    <div className="site-footer-nota">
                         Hecho con amor para ayudar a la comunidad desde Santa Rosa de Cabal
                     </div>
 
-                    <div
-                        style={{
-                            color: "#8FA9A1",
-                            fontSize: 11.5,
-                        }}
-                    >
+                    <div className="site-footer-copyright">
                         © {new Date().getFullYear()} Apoyo
                     </div>
                 </div>

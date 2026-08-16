@@ -1,5 +1,4 @@
 import { supabase } from "../supabaseClient";
-import { uploadFoto } from "./reportesService";
 
 /**
  * Obtiene todos los avistamientos registrados en el sistema ordenados por fecha.
@@ -31,34 +30,25 @@ export async function fetchAvistamientosByReporte(reporteId) {
 /**
  * Registra un nuevo avistamiento vinculado a un reporte.
  */
-export async function createAvistamiento(reporteId, form, file) {
-  let foto_url = null;
-  if (file) {
-    foto_url = await uploadFoto(file);
-  }
-
-  const { data, error } = await supabase
-    .from("avistamientos")
-    .insert({
-      reporte_id: reporteId,
-      sector: form.sector,
-      descripcion: form.descripcion || null,
-      telefono: form.telefono || null,
-      foto_url,
-    })
-    .select()
-    .single();
+export async function createAvistamiento(reporteId, form) {
+  const { error } = await supabase.from("avistamientos").insert({
+    reporte_id: reporteId,
+    sector: form.sector,
+    hora: form.hora || null,
+    descripcion: form.descripcion || null,
+    telefono: form.telefono || null,
+  });
 
   if (error) throw error;
-  return data;
 }
 
 /**
  * Suscribe un listener a cambios en tiempo real en la tabla 'avistamientos'.
+ * Retorna una función de limpieza para desuscribirse.
  */
 export function subscribeAvistamientosRealtime(onUpdate) {
   const canal = supabase
-    .channel("avistamientos-realtime")
+    .channel("cambios-avistamientos")
     .on(
       "postgres_changes",
       { event: "*", schema: "public", table: "avistamientos" },

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
 import useBodyScrollLock from "../../hooks/useBodyScrollLock";
+import "./ImageModal.css";
 
 export default function ImageModal({ src, alt, title, subtitle, onClose }) {
   useBodyScrollLock(true);
@@ -15,86 +16,34 @@ export default function ImageModal({ src, alt, title, subtitle, onClose }) {
 
   return (
     <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(10, 10, 10, 0.88)",
-        backdropFilter: "blur(4px)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 60,
-        padding: 16,
-        overscrollBehavior: "none",
-      }}
+      className="image-modal-overlay"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-label={title || "Foto en pantalla completa"}
     >
-      {/* Botón cerrar */}
       <button
         onClick={onClose}
-        style={{
-          position: "absolute",
-          top: 16,
-          right: 16,
-          background: "rgba(255, 255, 255, 0.15)",
-          border: "none",
-          borderRadius: "50%",
-          width: 40,
-          height: 40,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "#fff",
-          cursor: "pointer",
-          transition: "background 0.2s",
-          zIndex: 61,
-        }}
+        className="image-modal-cerrar"
         aria-label="Cerrar vista previa"
       >
         <X size={22} />
       </button>
 
-      {/* Contenedor de imagen */}
       <div
-        style={{
-          maxWidth: "92vw",
-          maxHeight: "84vh",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
+        className="image-modal-contenedor"
         onClick={(e) => e.stopPropagation()}
       >
         <img
           src={src}
           alt={alt || "Foto de mascota"}
-          style={{
-            maxWidth: "100%",
-            maxHeight: "75vh",
-            objectFit: "contain",
-            borderRadius: 8,
-            boxShadow: "0 8px 30px rgba(0, 0, 0, 0.5)",
-          }}
+          className="image-modal-imagen"
         />
         {(title || subtitle) && (
-          <div
-            style={{
-              marginTop: 12,
-              textAlign: "center",
-              color: "#fff",
-            }}
-          >
-            {title && (
-              <div style={{ fontWeight: 700, fontSize: 16 }}>{title}</div>
-            )}
+          <div className="image-modal-caption">
+            {title && <div className="image-modal-titulo">{title}</div>}
             {subtitle && (
-              <div style={{ fontSize: 13, color: "#CCCCCC", marginTop: 3 }}>
-                {subtitle}
-              </div>
+              <div className="image-modal-subtitulo">{subtitle}</div>
             )}
           </div>
         )}

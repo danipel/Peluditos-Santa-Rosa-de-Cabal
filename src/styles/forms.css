@@ -1,0 +1,113 @@
+.form-columna {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-fila {
+  display: flex;
+  gap: 10px;
+}
+
+.form-flexible {
+  flex: 1;
+}
+
+.campo-etiqueta {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--color-texto-suave);
+}
+
+.campo-etiqueta-icono {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.campo-input {
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: var(--radio);
+  border: 1px solid var(--color-borde);
+  font-size: 13.5px;
+  box-sizing: border-box;
+  margin-top: 4px;
+}
+
+.campo-textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+
+.campo-textarea-grande {
+  min-height: 70px;
+}
+
+.campo-helper {
+  font-size: 11.5px;
+  color: #777777;
+  margin-top: 4px;
+}
+
+.campo-input-solo-lectura {
+  background: var(--color-fondo);
+}
+
+.campo-archivo {
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+.campo-helper-error {
+  color: var(--color-peligro);
+}
+
+.boton-enviar {
+  width: 100%;
+  background: var(--color-primario);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radio);
+  padding: 11px 0;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.boton-enviar:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.boton-enviar-acento {
+  background: var(--color-acento);
+}
+
+.boton-enviar-advertencia {
+  background: var(--color-advertencia);
+}
+
+.alerta {
+  background: var(--color-peligro-fondo);
+  color: var(--color-peligro);
+  padding: 8px 12px;
+  border-radius: var(--radio);
+  font-size: 13px;
+}
+
+.pin-mostrado {
+  font-size: 26px;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 4px;
+  background: var(--color-fondo);
+  padding: 14px 0;
+  border-radius: 10px;
+  margin: 12px 0;
+}
+
+.texto-detalle {
+  font-size: 13.5px;
+  line-height: 1.5;
+}

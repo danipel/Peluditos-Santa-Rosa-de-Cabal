@@ -1,0 +1,120 @@
+.site-footer {
+  margin-top: 40px;
+  background: var(--color-primario);
+  color: #ffffff;
+  padding: 32px 16px 20px;
+}
+
+.site-footer-inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.site-footer-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(140px, 1fr);
+  gap: 32px;
+  padding-bottom: 28px;
+}
+
+.site-footer-marca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.site-footer-marca-titulo {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.site-footer-descripcion {
+  margin: 0;
+  color: #d6e0dc;
+  font-size: 13.5px;
+  line-height: 1.6;
+  max-width: 420px;
+}
+
+.site-footer-titulo-acciones {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #afc5be;
+  margin-bottom: 10px;
+}
+
+.site-footer-acciones {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.site-footer-enlace {
+  padding: 0;
+  border: none;
+  background: none;
+  color: #ffffff;
+  text-align: left;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.site-footer-apoyo {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 22px 0;
+  margin-bottom: 18px;
+}
+
+.site-footer-apoyo-inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.site-footer-apoyo-columna {
+  flex: 1;
+  min-width: 240px;
+}
+
+.site-footer-apoyo-titulo-fila {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 7px;
+}
+
+.site-footer-apoyo-titulo {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.site-footer-apoyo-texto {
+  margin: 0;
+  color: #c3d2cd;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+.site-footer-inferior {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.site-footer-nota {
+  color: #afc5be;
+  font-size: 12px;
+}
+
+.site-footer-copyright {
+  color: #8fa9a1;
+  font-size: 11.5px;
+}

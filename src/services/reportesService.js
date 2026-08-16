@@ -1,16 +1,22 @@
 import { supabase } from "../supabaseClient";
 
 /**
- * Obtiene todos los reportes ordenados por fecha de creación descendente.
+ * Obtiene los reportes ordenados por fecha de creación descendente.
+ * Si se pasa una ciudad distinta de "Todos", filtra por esa ciudad.
  */
-export async function fetchReportes() {
-  const { data, error } = await supabase
+export async function fetchReportes(ciudad) {
+  let query = supabase
     .from("reportes")
     .select("*")
     .order("created_at", { ascending: false });
 
+  if (ciudad && ciudad !== "Todos") {
+    query = query.eq("ciudad", ciudad);
+  }
+
+  const { data, error } = await query;
   if (error) throw error;
-  return data;
+  return data || [];
 }
 
 /**
@@ -38,6 +44,7 @@ export async function createReporte(form, file) {
   const pin = Math.floor(1000 + Math.random() * 9000).toString();
 
   const { error } = await supabase.from("reportes").insert({
+    ciudad: form.ciudad,
     estado: form.estado,
     especie: form.especie,
     nombre: form.nombre || null,
@@ -94,10 +101,11 @@ export async function deleteReporte(id) {
 
 /**
  * Suscribe un listener a cambios en tiempo real en la tabla 'reportes'.
+ * Retorna una función de limpieza para desuscribirse.
  */
-export function subscribeReportesRealtime(onUpdate) {
+export function subscribeReportesRealtime(ciudad, onUpdate) {
   const canal = supabase
-    .channel("reportes-realtime")
+    .channel(`cambios-reportes-${ciudad}`)
     .on(
       "postgres_changes",
       { event: "*", schema: "public", table: "reportes" },

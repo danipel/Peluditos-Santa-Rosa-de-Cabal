@@ -13,22 +13,6 @@ function FormularioAlbergue({ initial, onClose, onSave }) {
         ciudad: ciudad || "",
     });
 
-    const inputStyle = {
-        width: "100%",
-        padding: "9px 10px",
-        borderRadius: 8,
-        border: "1px solid #DAD6CC",
-        fontSize: 13.5,
-        boxSizing: "border-box",
-        marginTop: 4,
-    };
-
-    const labelStyle = {
-        fontSize: 12.5,
-        fontWeight: 600,
-        color: "#4A4A47",
-    };
-
     function handleSubmit(e) {
         e.preventDefault();
         onSave(form);
@@ -39,16 +23,9 @@ function FormularioAlbergue({ initial, onClose, onSave }) {
             onClose={onClose}
             title="Datos del albergue temporal"
         >
-            <form
-                onSubmit={handleSubmit}
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 12,
-                }}
-            >
+            <form onSubmit={handleSubmit} className="form-columna">
                 <div>
-                    <div style={labelStyle}>Nombre del punto</div>
+                    <div className="campo-etiqueta">Nombre del punto</div>
 
                     <input
                         value={form.nombre}
@@ -58,12 +35,12 @@ function FormularioAlbergue({ initial, onClose, onSave }) {
                                 nombre: e.target.value,
                             }))
                         }
-                        style={inputStyle}
+                        className="campo-input"
                     />
                 </div>
 
                 <div>
-                    <div style={labelStyle}>Dirección</div>
+                    <div className="campo-etiqueta">Dirección</div>
 
                     <input
                         value={form.direccion}
@@ -73,12 +50,12 @@ function FormularioAlbergue({ initial, onClose, onSave }) {
                                 direccion: e.target.value,
                             }))
                         }
-                        style={inputStyle}
+                        className="campo-input"
                     />
                 </div>
 
                 <div>
-                    <div style={labelStyle}>Horario de atención</div>
+                    <div className="campo-etiqueta">Horario de atención</div>
 
                     <input
                         value={form.horario}
@@ -88,33 +65,21 @@ function FormularioAlbergue({ initial, onClose, onSave }) {
                                 horario: e.target.value,
                             }))
                         }
-                        style={inputStyle}
+                        className="campo-input"
                     />
                 </div>
 
                 <div>
-                    <div style={labelStyle}>Ciudad</div>
+                    <div className="campo-etiqueta">Ciudad</div>
 
                     <input
                         readOnly={true}
                         value={form.ciudad}
-                        style={inputStyle}
+                        className="campo-input"
                     />
                 </div>
 
-                <button
-                    type="submit"
-                    style={{
-                        background: "#1F3A34",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: 8,
-                        padding: "11px 0",
-                        fontSize: 14,
-                        fontWeight: 700,
-                        cursor: "pointer",
-                    }}
-                >
+                <button type="submit" className="boton-enviar">
                     Guardar
                 </button>
             </form>

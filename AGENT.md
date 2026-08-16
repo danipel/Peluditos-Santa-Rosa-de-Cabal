@@ -18,7 +18,7 @@ Este documento define la arquitectura, el sistema de diseño estándar y las con
 
 ## 2. Sistema de Diseño y Estilos Estándar (Design Tokens)
 
-Para mantener una interfaz consistente, sobria, accesible y con estética premium, se deben utilizar exclusivamente los siguientes tokens de color, tipografía y formas:
+Para mantener una interfaz consistente, sobria, accesible y con estética premium, se deben utilizar exclusivamente los siguientes tokens de color, tipografía y formas. **Estos tokens están definidos como variables CSS en `src/styles/tokens.css`** (ver sección 2.5).
 
 ### 2.1. Paleta de Colores
 
@@ -63,26 +63,39 @@ Para mantener una interfaz consistente, sobria, accesible y con estética premiu
   - `borderRadius: "16px 16px 0 0"`: Ventanas modales emergentes.
   - `borderRadius: 999`: Píldoras de filtros, badges de estado y botón flotante (FAB).
 
-### 2.5. Patrones de Estilos para Formularios e Inputs
+### 2.5. Dónde viven los Estilos (CSS modular)
 
-Al crear nuevos formularios, usar la siguiente convención de objetos de estilo:
-```javascript
-const inputStyle = {
-  width: "100%",
-  padding: "9px 10px",
-  borderRadius: 8,
-  border: "1px solid #DAD6CC",
-  fontSize: 13.5,
-  boxSizing: "border-box",
-  marginTop: 4,
-};
+Los estilos **NO** deben definirse como objetos `style={{...}}` dentro del JSX ni en bloques `<style>` embebidos. Se organizan en archivos `.css`:
 
-const labelStyle = {
-  fontSize: 12.5,
-  fontWeight: 600,
-  color: "#4A4A47",
-};
+| Archivo | Ubicación | Contenido |
+|---|---|---|
+| `tokens.css` | `src/styles/` | Variables CSS de diseño (`--color-primario`, `--color-acento`, `--color-borde`, `--radio`, etc.). Úsalas en lugar de repetir valores hex. |
+| `base.css` | `src/styles/` | Clases globales (`.pagina`) y animaciones (`.animate-spin`). |
+| `forms.css` | `src/styles/` | Clases reutilizables de formularios. |
+| `*.css` co-ubicado | junto a cada `.jsx` | Estilos específicos de cada componente (`Card.css`, `Header.css`, ...). |
+
+Los tres archivos de `src/styles/` se importan una sola vez en `src/main.jsx`. Cada componente importa su propio `.css` con `import "./Componente.css"`.
+
+#### Clases de formulario (reemplazan los objetos de estilo)
+
+```jsx
+// ANTES (evitar): objetos de estilo inline
+const inputStyle = { width: "100%", padding: "9px 10px", ... };
+
+// AHORA (correcto): clases compartidas de src/styles/forms.css
+<input className="campo-input" />
+<div className="campo-etiqueta">Label</div>
+<button className="boton-enviar">Enviar</button>
 ```
+
+Clases disponibles en `src/styles/forms.css`:
+- **Campos:** `.campo-input`, `.campo-textarea`, `.campo-textarea-grande`, `.campo-archivo`, `.campo-input-solo-lectura`
+- **Etiquetas y ayudas:** `.campo-etiqueta`, `.campo-etiqueta-icono`, `.campo-helper`, `.campo-helper-error`
+- **Botones:** `.boton-enviar` (+ modificadores `--acento`, `--advertencia`)
+- **Layout de formulario:** `.form-columna`, `.form-fila`, `.form-flexible`
+- **Feedback:** `.alerta`, `.pin-mostrado`, `.texto-detalle`
+
+Los únicos estilos inline permitidos son los **dinámicos dependientes de datos** (ej. `style={{ color: estado.color, background: estado.bg }}` en los badges de estado).
 
 ---
 
@@ -107,33 +120,45 @@ Para permitir el desarrollo concurrente de varios programadores sin conflictos d
 
 ```
 src/
-├── constants/           # Constantes de dominio, colores y estados globales
+├── constants/               # Constantes de dominio, estados, especies y enlaces
 │   └── mascotas.js
-├── services/            # Capa de comunicación con Supabase (CRUD, Storage, Realtime)
+├── styles/                  # Estilos compartidos (tokens + utilidades globales)
+│   ├── tokens.css           # Variables CSS de diseño (colores, radios)
+│   ├── base.css             # Clases globales (.pagina) y animaciones
+│   └── forms.css            # Clases reutilizables de formularios
+├── utils/                   # Funciones puras y helpers reutilizables
+│   └── compartir.js         # Lógica de compartir (Web Share, enlaces, portapapeles)
+├── services/                # Capa de comunicación con Supabase (CRUD, Storage, Realtime)
 │   ├── reportesService.js
+│   ├── avistamientosService.js
 │   └── albergueService.js
-├── hooks/               # Custom hooks con la lógica de negocio y estado reactivo
-│   ├── useReportes.js
-│   └── useAlbergue.js
-├── components/          # Componentes independientes agrupados por dominio
-│   ├── common/          # Componentes reutilizables agnósticos del negocio (Modal, etc.)
-│   │   └── Modal.jsx
-│   ├── layout/          # Encabezados, pies de página o contenedores globales
-│   │   └── Header.jsx
-│   ├── albergue/        # Módulo de Albergue Temporal
-│   │   ├── AlbergueBanner.jsx
-│   │   └── FormularioAlbergue.jsx
-│   ├── reportes/        # Módulo de Reportes de Mascotas
-│   │   ├── ReporteCard.jsx
-│   │   ├── ReportesFiltros.jsx
-│   │   ├── ReportesLista.jsx
-│   │   ├── FormularioReporte.jsx
-│   │   └── BotonReportar.jsx
-│   └── index.js         # Exportaciones centralizadas (Barrel export)
-├── App.jsx              # Orquestador principal (ensamble limpio de ~50-80 líneas)
-├── supabaseClient.js    # Inicialización del cliente Supabase
-└── main.jsx             # Punto de montaje de React
+├── hooks/                   # Custom hooks con lógica de negocio y estado reactivo
+│   ├── useReportes.js       # Reportes + avistamientos (carga, filtros, mutaciones, realtime)
+│   ├── useAlbergue.js       # Información del albergue temporal por ciudad
+│   ├── useSession.js        # Sesión de autenticación (Supabase Auth)
+│   └── useBodyScrollLock.js # Bloqueo del scroll del body en modales
+├── components/              # Componentes independientes agrupados por dominio
+│   ├── common/              # Reutilizables agnósticos del negocio (Modal, Card, BannerAyuda, BotonCompartir, ...)
+│   ├── layout/              # Header, Footer, ScrollToTop
+│   ├── albergue/            # Módulo de Albergue Temporal (AlbergueBanner)
+│   ├── reportes/            # Módulo de Reportes (ReporteCard, ReportesFiltros, ReportesLista, BotonReportar)
+│   ├── forms/               # Formularios (FormularioReporte, FormularioAvistamiento, FormularioLogin, FormularioAlbergue)
+│   └── index.js             # Exportaciones centralizadas (barrel export)
+├── App.jsx / App.css        # Vista principal (listado, filtros y orquestación)
+├── home.jsx / home.css      # Pantalla de selección de ciudad
+├── Root.jsx                 # Definición de rutas de react-router
+├── supabaseClient.js        # Inicialización del cliente Supabase
+└── main.jsx                 # Punto de montaje (importa los estilos globales de src/styles/)
 ```
+
+### 4.1. Rutas de la aplicación (`Root.jsx`)
+
+| Ruta | Componente | Descripción |
+|---|---|---|
+| `/home` | `home.jsx` | Pantalla de selección de ciudad |
+| `/` | `App.jsx` | Listado y filtros de reportes (requiere `?ciudad=` en la URL) |
+
+Cada componente visual (`*.jsx`) vive acompañado de su archivo de estilos (`*.css`) en la misma carpeta. Los componentes de `components/forms/` usan las clases compartidas de `src/styles/forms.css` en lugar de un CSS propio.
 
 ---
 
@@ -144,7 +169,7 @@ Cuando un agente vaya a agregar una nueva funcionalidad (ejemplo: *Donaciones*, 
 1. **Definir Constantes (si aplica):** Añadir constantes o tipos en `src/constants/`.
 2. **Crear el Servicio:** Crear `src/services/<modulo>Service.js` con las funciones que llaman a Supabase.
 3. **Crear el Hook:** Crear `src/hooks/use<Modulo>.js` que gestiona el estado, `loading`, `error` y las llamadas al servicio.
-4. **Crear Componentes Independientes:** Crear la carpeta `src/components/<modulo>/` con los componentes visuales necesarios (Tarjetas, Formularios, Listas).
+4. **Crear Componentes Independientes:** Crear la carpeta `src/components/<modulo>/` con los componentes visuales necesarios (Tarjetas, Formularios, Listas) y su archivo de estilos `.css` co-ubicado (o reutiliza las clases de `src/styles/forms.css` para formularios).
 5. **Re-exportar:** Agregar los nuevos componentes a `src/components/index.js`.
 6. **Integrar en `App.jsx`:** Importar el hook y los componentes en `App.jsx` sin introducir lógica de base de datos directa.
 
@@ -156,8 +181,8 @@ Antes de dar por finalizada cualquier tarea, el agente debe verificar que la apl
 
 ```bash
 # Validar compilación, imports y sintaxis con Vite
-npm run build
+pnpm build
 
 # Levantar entorno de desarrollo si se requiere probar interacciones
-npm run dev
+pnpm dev
 ```

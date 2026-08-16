@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { supabase } from "./supabaseClient";
-
 import {
     Header,
     Footer,
@@ -10,27 +8,22 @@ import {
     TarjetaCiudad,
 } from "./components/index.js";
 
+import { useSession } from "./hooks/useSession";
+
+import "./home.css";
+
 export default function Home() {
     const navigate = useNavigate();
 
-    const [session, setSession] = useState(null);
     const [showLogin, setShowLogin] = useState(false);
+    const { session, login, logout } = useSession();
 
-    async function login(email, password) {
-        const { error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
-
-        if (error) return error.message;
+    async function handleLogin(email, password) {
+        const error = await login(email, password);
+        if (error) return error;
 
         setShowLogin(false);
         return null;
-    }
-
-    async function logout() {
-        await supabase.auth.signOut();
-        setSession(null);
     }
 
     const tarjetas = [
@@ -63,14 +56,7 @@ export default function Home() {
     }
 
     return (
-        <div
-            style={{
-                minHeight: "100vh",
-                background: "#F6F5F2",
-                fontFamily: "'Inter', system-ui, sans-serif",
-                color: "#2A2A28",
-            }}
-        >
+        <div className="pagina">
             <Header
                 session={session}
                 onLogin={() => setShowLogin(true)}
@@ -80,45 +66,20 @@ export default function Home() {
             {showLogin && (
                 <FormularioLogin
                     onClose={() => setShowLogin(false)}
-                    onLogin={login}
+                    onLogin={handleLogin}
                 />
             )}
 
-            <main
-                style={{
-                    maxWidth: "1200px",
-                    margin: "0 auto",
-                    padding: "60px 24px",
-                }}
-            >
-                <h1
-                    style={{
-                        textAlign: "center",
-                        fontSize: "32px",
-                        marginBottom: "12px",
-                    }}
-                >
+            <main className="home-main">
+                <h1 className="home-titulo">
                     Selecciona un ciudad
                 </h1>
 
-                <p
-                    style={{
-                        textAlign: "center",
-                        color: "#777",
-                        marginBottom: "40px",
-                    }}
-                >
+                <p className="home-subtitulo">
                     Elige el ciudad que deseas consultar
                 </p>
 
-                <div
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns:
-                            "repeat(auto-fit, minmax(280px, 1fr))",
-                        gap: "28px",
-                    }}
-                >
+                <div className="home-grid">
                     {tarjetas.map((tarjeta) => (
                         <TarjetaCiudad
                             key={tarjeta.titulo}
@@ -133,12 +94,12 @@ export default function Home() {
                     ))}
                 </div>
             </main>
-                  <Footer
-                    onInicio={() => navigate("/home")}
-                    onReportar={() => setShowForm(true)}
-                    onCambiarCiudad={() => navigate("/home")}
-                  />
-            
+
+            <Footer
+                onInicio={() => navigate("/home")}
+                onReportar={() => navigate("/?ciudad=Todos")}
+                onCambiarCiudad={() => navigate("/home")}
+            />
         </div>
     );
 }

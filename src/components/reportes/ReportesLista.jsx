@@ -1,5 +1,6 @@
 import { Loader2 } from "lucide-react";
 import ReporteCard from "./ReporteCard";
+import "./ReportesLista.css";
 
 export default function ReportesLista({
   reportes,
@@ -9,17 +10,7 @@ export default function ReportesLista({
 }) {
   if (loading) {
     return (
-      <div
-        style={{
-          textAlign: "center",
-          padding: 40,
-          color: "#9A9A94",
-          fontSize: 13.5,
-          display: "flex",
-          justifyContent: "center",
-          gap: 6,
-        }}
-      >
+      <div className="reportes-lista-cargando">
         <Loader2 className="animate-spin" size={16} /> Cargando reportes...
       </div>
     );
@@ -27,21 +18,14 @@ export default function ReportesLista({
 
   if (reportes.length === 0) {
     return (
-      <div
-        style={{
-          textAlign: "center",
-          padding: 40,
-          color: "#9A9A94",
-          fontSize: 13.5,
-        }}
-      >
+      <div className="reportes-lista-vacia">
         No hay reportes con estos filtros todavía.
       </div>
     );
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+    <div className="reportes-lista">
       {reportes.map((reporte) => (
         <ReporteCard
           key={reporte.id}

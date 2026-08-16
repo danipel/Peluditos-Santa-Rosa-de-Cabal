@@ -1,0 +1,22 @@
+.reportes-lista-cargando {
+  text-align: center;
+  padding: 40px;
+  color: var(--color-texto-muy-tenue);
+  font-size: 13.5px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.reportes-lista-vacia {
+  text-align: center;
+  padding: 40px;
+  color: var(--color-texto-muy-tenue);
+  font-size: 13.5px;
+}
+
+.reportes-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}

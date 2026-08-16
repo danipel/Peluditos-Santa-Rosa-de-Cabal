@@ -11,22 +11,6 @@ function FormularioAvistamiento({ onClose, onSave }) {
 
   const [enviando, setEnviando] = useState(false);
 
-  const inputStyle = {
-    width: "100%",
-    padding: "9px 10px",
-    borderRadius: 8,
-    border: "1px solid #DAD6CC",
-    fontSize: 13.5,
-    boxSizing: "border-box",
-    marginTop: 4,
-  };
-
-  const labelStyle = {
-    fontSize: 12.5,
-    fontWeight: 600,
-    color: "#4A4A47",
-  };
-
   async function submit(e) {
     e.preventDefault();
 
@@ -40,20 +24,10 @@ function FormularioAvistamiento({ onClose, onSave }) {
   }
 
   return (
-    <Modal
-      onClose={onClose}
-      title="Registrar avistamiento"
-    >
-      <form
-        onSubmit={submit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 12,
-        }}
-      >
+    <Modal onClose={onClose} title="Registrar avistamiento">
+      <form onSubmit={submit} className="form-columna">
         <div>
-          <div style={labelStyle}>
+          <div className="campo-etiqueta">
             Sector donde lo viste *
           </div>
 
@@ -65,13 +39,13 @@ function FormularioAvistamiento({ onClose, onSave }) {
                 sector: e.target.value,
               }))
             }
-            style={inputStyle}
+            className="campo-input"
             required
           />
         </div>
 
         <div>
-          <div style={labelStyle}>
+          <div className="campo-etiqueta">
             Hora aproximada
           </div>
 
@@ -83,13 +57,13 @@ function FormularioAvistamiento({ onClose, onSave }) {
                 hora: e.target.value,
               }))
             }
-            style={inputStyle}
+            className="campo-input"
             placeholder="Ej: hoy 3:00 p.m."
           />
         </div>
 
         <div>
-          <div style={labelStyle}>
+          <div className="campo-etiqueta">
             Descripción del avistamiento
           </div>
 
@@ -101,17 +75,13 @@ function FormularioAvistamiento({ onClose, onSave }) {
                 descripcion: e.target.value,
               }))
             }
-            style={{
-              ...inputStyle,
-              minHeight: 60,
-              resize: "vertical",
-            }}
+            className="campo-input campo-textarea"
             placeholder="Hacia dónde iba, estado del animal..."
           />
         </div>
 
         <div>
-          <div style={labelStyle}>
+          <div className="campo-etiqueta">
             Tu contacto (por si el grupo de búsqueda necesita más info)
           </div>
 
@@ -123,7 +93,7 @@ function FormularioAvistamiento({ onClose, onSave }) {
                 telefono: e.target.value,
               }))
             }
-            style={inputStyle}
+            className="campo-input"
             placeholder="Opcional"
           />
         </div>
@@ -131,21 +101,9 @@ function FormularioAvistamiento({ onClose, onSave }) {
         <button
           type="submit"
           disabled={enviando}
-          style={{
-            background: "#8A6D00",
-            color: "#fff",
-            border: "none",
-            borderRadius: 8,
-            padding: "11px 0",
-            fontSize: 14,
-            fontWeight: 700,
-            cursor: enviando ? "default" : "pointer",
-            opacity: enviando ? 0.7 : 1,
-          }}
+          className="boton-enviar boton-enviar-advertencia"
         >
-          {enviando
-            ? "Guardando..."
-            : "Guardar avistamiento"}
+          {enviando ? "Guardando..." : "Guardar avistamiento"}
         </button>
       </form>
     </Modal>

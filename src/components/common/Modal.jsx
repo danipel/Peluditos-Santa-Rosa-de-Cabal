@@ -23,7 +23,7 @@ export default function Modal({ title, onClose, children }) {
           <div className="modal-title">
             <ArrowLeft
               size={16}
-              style={{ cursor: "pointer" }}
+              className="modal-back-btn"
               onClick={onClose}
             />
 
@@ -33,10 +33,6 @@ export default function Modal({ title, onClose, children }) {
           <X
             size={18}
             className="modal-close-btn"
-            style={{
-              cursor: "pointer",
-              color: "#8A8A85",
-            }}
             onClick={onClose}
           />
         </div>

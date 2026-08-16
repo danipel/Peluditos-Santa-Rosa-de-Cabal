@@ -1,50 +1,40 @@
 import { useState, useEffect, useCallback } from "react";
-import { fetchAlbergueInfo, updateAlbergueInfo } from "../services/albergueService";
+import { fetchAlbergues, updateAlbergueInfo } from "../services/albergueService";
 
-export function useAlbergue() {
-  const [albergue, setAlbergue] = useState({
-    nombre: "",
-    direccion: "",
-    horario: "",
-  });
-  const [loadingAlbergue, setLoadingAlbergue] = useState(true);
-  const [albergueError, setAlbergueError] = useState("");
+/**
+ * Hook que gestiona la información del punto de acopio / albergue temporal
+ * de una ciudad determinada.
+ */
+export function useAlbergue(ciudad) {
+  const [albergues, setAlbergues] = useState([]);
 
   const cargarAlbergue = useCallback(async () => {
+    if (!ciudad) return;
     try {
-      const data = await fetchAlbergueInfo();
-      if (data) {
-        setAlbergue(data);
-      }
+      const data = await fetchAlbergues(ciudad);
+      setAlbergues(data || []);
     } catch (err) {
-      // Si no existe aún o falla, mantenemos los valores por defecto
-    } finally {
-      setLoadingAlbergue(false);
+      // Silencioso: si no hay datos, se muestra el estado "sin registrar"
     }
-  }, []);
+  }, [ciudad]);
 
   useEffect(() => {
     cargarAlbergue();
   }, [cargarAlbergue]);
 
   const guardarAlbergue = async (info) => {
-    setAlbergueError("");
     try {
       await updateAlbergueInfo(info);
-      setAlbergue(info);
+      await cargarAlbergue();
       return true;
     } catch (err) {
-      setAlbergueError("No se pudo guardar la info del albergue.");
       return false;
     }
   };
 
   return {
-    albergue,
-    loadingAlbergue,
-    albergueError,
-    setAlbergueError,
-    guardarAlbergue,
+    albergues,
     cargarAlbergue,
+    guardarAlbergue,
   };
 }

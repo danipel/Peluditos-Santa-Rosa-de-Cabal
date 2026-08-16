@@ -2,23 +2,15 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Modal from "../common/Modal";
 
-function FormularioReporte({
-  onClose,
-  onSave,
-  ciudades = [],
-}) {
+function FormularioReporte({ onClose, onSave, ciudades = [] }) {
   const [searchParams] = useSearchParams();
 
-  const ciudadUrl =
-    searchParams.get("ciudad") || "";
+  const ciudadUrl = searchParams.get("ciudad") || "";
 
   const ciudadSeleccionada =
-    ciudadUrl && ciudadUrl !== "Todos"
-      ? ciudadUrl
-      : "";
+    ciudadUrl && ciudadUrl !== "Todos" ? ciudadUrl : "";
 
-  const esTodasLasCiudades =
-    ciudadUrl === "Todos";
+  const esTodasLasCiudades = ciudadUrl === "Todos";
 
   const [form, setForm] = useState({
     ciudad: ciudadSeleccionada,
@@ -58,8 +50,8 @@ function FormularioReporte({
       categoria,
       especie: "perro",
       estado: "perdido",
-      color:f.color,
-      tamano:f.tamano,
+      color: f.color,
+      tamano: f.tamano,
     }));
   }
 
@@ -68,18 +60,14 @@ function FormularioReporte({
 
     if (
       !form.ciudad.trim() ||
-      (form.categoria === "personas" &&
-        !form.nombre.trim()) ||
+      (form.categoria === "personas" && !form.nombre.trim()) ||
       !form.sector.trim() ||
       !form.telefono.trim()
     ) {
       return;
     }
 
-    if (
-      form.categoria === "mascotas" &&
-      !form.color.trim()
-    ) {
+    if (form.categoria === "mascotas" && !form.color.trim()) {
       return;
     }
 
@@ -88,8 +76,7 @@ function FormularioReporte({
     const formConNombre = {
       ...form,
       nombre:
-        form.categoria === "mascotas" &&
-        !form.nombre.trim()
+        form.categoria === "mascotas" && !form.nombre.trim()
           ? form.especie === "gato"
             ? "Gato"
             : "Perro"
@@ -105,79 +92,22 @@ function FormularioReporte({
     }
   }
 
-  const inputStyle = {
-    width: "100%",
-    padding: "9px 10px",
-    borderRadius: 8,
-    border: "1px solid #DAD6CC",
-    fontSize: 13.5,
-    boxSizing: "border-box",
-    marginTop: 4,
-  };
-
-  const labelStyle = {
-    fontSize: 12.5,
-    fontWeight: 600,
-    color: "#4A4A47",
-  };
-
-  const helperStyle = {
-    fontSize: 11.5,
-    color: "#777",
-    marginTop: 4,
-  };
-
   // ---------------------------------------------------------
   // Reporte publicado
   // ---------------------------------------------------------
 
   if (pinGenerado) {
     return (
-      <Modal
-        onClose={onClose}
-        title="¡Reporte publicado!"
-      >
-        <div
-          style={{
-            fontSize: 13.5,
-            lineHeight: 1.5,
-          }}
-        >
+      <Modal onClose={onClose} title="¡Reporte publicado!">
+        <div className="texto-detalle">
           <p>
-            Tu reporte ya está visible para todos.
-            Guarda este código por si necesitas
-            identificarte luego:
+            Tu reporte ya está visible para todos. Guarda este código por si
+            necesitas identificarte luego:
           </p>
 
-          <div
-            style={{
-              fontSize: 26,
-              fontWeight: 800,
-              textAlign: "center",
-              letterSpacing: 4,
-              background: "#F6F5F2",
-              padding: "14px 0",
-              borderRadius: 10,
-              margin: "12px 0",
-            }}
-          >
-            {pinGenerado}
-          </div>
+          <div className="pin-mostrado">{pinGenerado}</div>
 
-          <button
-            onClick={onClose}
-            style={{
-              width: "100%",
-              background: "#1F3A34",
-              color: "#fff",
-              border: "none",
-              borderRadius: 8,
-              padding: "11px 0",
-              fontSize: 14,
-              fontWeight: 700,
-              cursor: "pointer",
-            }}
-          >
+          <button onClick={onClose} className="boton-enviar">
             Entendido
           </button>
         </div>
@@ -186,89 +116,55 @@ function FormularioReporte({
   }
 
   return (
-    <Modal
-      onClose={onClose}
-      title={"Reportar mascota"
-      }
-    >
-      <form
-        onSubmit={submit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 12,
-        }}
-      >
+    <Modal onClose={onClose} title={"Reportar mascota"}>
+      <form onSubmit={submit} className="form-columna">
         {/* -------------------------------------------------
             Ciudad
         ------------------------------------------------- */}
 
         <div>
-          <div style={labelStyle}>
-            Ciudad *
-          </div>
+          <div className="campo-etiqueta">Ciudad *</div>
 
           {esTodasLasCiudades ? (
             <>
               <select
                 value={form.ciudad}
-                onChange={(e) =>
-                  set(
-                    "ciudad",
-                    e.target.value
-                  )
-                }
-                style={inputStyle}
+                onChange={(e) => set("ciudad", e.target.value)}
+                className="campo-input"
                 required
               >
-                <option value="">
-                  Selecciona una ciudad
-                </option>
+                <option value="">Selecciona una ciudad</option>
 
                 {ciudades.map((nombreCiudad) => (
-                  <option
-                    key={nombreCiudad}
-                    value={nombreCiudad}
-                  >
+                  <option key={nombreCiudad} value={nombreCiudad}>
                     {nombreCiudad}
                   </option>
                 ))}
               </select>
 
-              <div style={helperStyle}>
-                Selecciona la ciudad donde
-                corresponde el reporte.
+              <div className="campo-helper">
+                Selecciona la ciudad donde corresponde el reporte.
               </div>
             </>
           ) : (
             <>
               <input
                 value={form.ciudad}
-                style={{
-                  ...inputStyle,
-                  background: "#F6F5F2",
-                }}
+                className="campo-input campo-input-solo-lectura"
                 placeholder="Ciudad"
                 required
                 readOnly
               />
 
-              <div style={helperStyle}>
-                Ciudad seleccionada desde la
-                búsqueda inicial.
+              <div className="campo-helper">
+                Ciudad seleccionada desde la búsqueda inicial.
               </div>
             </>
           )}
 
           {!form.ciudad && (
-            <div
-              style={{
-                ...helperStyle,
-                color: "#B4472E",
-              }}
-            >
-              Debes seleccionar una ciudad
-              antes de crear un reporte.
+            <div className="campo-helper campo-helper-error">
+              Debes seleccionar una ciudad antes de crear un reporte.
             </div>
           )}
         </div>
@@ -280,134 +176,76 @@ function FormularioReporte({
         {form.categoria === "mascotas" && (
           <>
             {/* Tipo de reporte */}
-
             <div>
-              <div style={labelStyle}>
-                Tipo de reporte
-              </div>
+              <div className="campo-etiqueta">Tipo de reporte</div>
 
               <select
                 value={form.estado}
-                onChange={(e) =>
-                  set(
-                    "estado",
-                    e.target.value
-                  )
-                }
-                style={inputStyle}
+                onChange={(e) => set("estado", e.target.value)}
+                className="campo-input"
               >
-                <option value="perdido">
-                  Perdido — busco a mi mascota
-                </option>
+                <option value="perdido">Perdido — busco a mi mascota</option>
 
                 <option value="avistado">
                   Avistamiento — Lo vi pero no lo tengo conmigo
                 </option>
 
-                <option value="en_albergue">
-                  Está en el albergue temporal
-                </option>
+                <option value="en_albergue">Está en el albergue temporal</option>
               </select>
             </div>
 
             {/* Especie / Nombre */}
-
-            <div
-              style={{
-                display: "flex",
-                gap: 10,
-              }}
-            >
-              <div style={{ flex: 1 }}>
-                <div style={labelStyle}>
-                  Especie
-                </div>
+            <div className="form-fila">
+              <div className="form-flexible">
+                <div className="campo-etiqueta">Especie</div>
 
                 <select
                   value={form.especie}
-                  onChange={(e) =>
-                    set(
-                      "especie",
-                      e.target.value
-                    )
-                  }
-                  style={inputStyle}
+                  onChange={(e) => set("especie", e.target.value)}
+                  className="campo-input"
                 >
-                  <option value="perro">
-                    Perro
-                  </option>
-
-                  <option value="gato">
-                    Gato
-                  </option>
+                  <option value="perro">Perro</option>
+                  <option value="gato">Gato</option>
                 </select>
               </div>
 
-              <div style={{ flex: 1 }}>
-                <div style={labelStyle}>
-                  Nombre
-                </div>
+              <div className="form-flexible">
+                <div className="campo-etiqueta">Nombre</div>
 
                 <input
                   value={form.nombre}
-                  onChange={(e) =>
-                    set(
-                      "nombre",
-                      e.target.value
-                    )
-                  }
-                  style={inputStyle}
+                  onChange={(e) => set("nombre", e.target.value)}
+                  className="campo-input"
                   placeholder="Opcional"
                 />
 
-                <div style={helperStyle}>
-                  Si no se sabe, se usará
-                  Perro o Gato según la especie.
+                <div className="campo-helper">
+                  Si no se sabe, se usará Perro o Gato según la especie.
                 </div>
               </div>
             </div>
 
             {/* Color / Tamaño */}
-
-            <div
-              style={{
-                display: "flex",
-                gap: 10,
-              }}
-            >
-              <div style={{ flex: 1 }}>
-                <div style={labelStyle}>
-                  Color *
-                </div>
+            <div className="form-fila">
+              <div className="form-flexible">
+                <div className="campo-etiqueta">Color *</div>
 
                 <input
                   value={form.color}
-                  onChange={(e) =>
-                    set(
-                      "color",
-                      e.target.value
-                    )
-                  }
-                  style={inputStyle}
+                  onChange={(e) => set("color", e.target.value)}
+                  className="campo-input"
                   placeholder="Ej: Negro"
                   required
                 />
               </div>
 
-              <div style={{ flex: 1 }}>
-                <div style={labelStyle}>
-                  Tamaño
-                </div>
+              <div className="form-flexible">
+                <div className="campo-etiqueta">Tamaño</div>
 
                 <input
                   value={form.tamano}
-                  onChange={(e) =>
-                    set(
-                      "tamano",
-                      e.target.value
-                    )
-                  }
-                  style={inputStyle}
+                  onChange={(e) => set("tamano", e.target.value)}
+                  className="campo-input"
                   placeholder="Ej: Mediano"
                 />
               </div>
@@ -422,108 +260,62 @@ function FormularioReporte({
         {form.categoria === "personas" && (
           <>
             {/* Tipo de reporte */}
-
             <div>
-              <div style={labelStyle}>
-                Tipo de reporte
-              </div>
+              <div className="campo-etiqueta">Tipo de reporte</div>
 
               <select
                 value={form.estado}
-                onChange={(e) =>
-                  set(
-                    "estado",
-                    e.target.value
-                  )
-                }
-                style={inputStyle}
+                onChange={(e) => set("estado", e.target.value)}
+                className="campo-input"
               >
-                <option value="perdido">
-                  Persona desaparecida
-                </option>
+                <option value="perdido">Persona desaparecida</option>
 
-                <option value="reunido">
-                  Persona localizada
-                </option>
+                <option value="reunido">Persona localizada</option>
               </select>
             </div>
 
             {/* Nombre */}
-
             <div>
-              <div style={labelStyle}>
-                Nombre completo *
-              </div>
+              <div className="campo-etiqueta">Nombre completo *</div>
 
               <input
                 value={form.nombre}
-                onChange={(e) =>
-                  set(
-                    "nombre",
-                    e.target.value
-                  )
-                }
-                style={inputStyle}
+                onChange={(e) => set("nombre", e.target.value)}
+                className="campo-input"
                 placeholder="Nombre completo"
                 required
               />
             </div>
 
             {/* Edad / Género */}
-
-            <div
-              style={{
-                display: "flex",
-                gap: 10,
-              }}
-            >
-              <div style={{ flex: 1 }}>
-                <div style={labelStyle}>
-                  Edad
-                </div>
+            <div className="form-fila">
+              <div className="form-flexible">
+                <div className="campo-etiqueta">Edad</div>
 
                 <input
                   type="number"
                   min="0"
                   max="120"
                   value={form.edad}
-                  onChange={(e) =>
-                    set(
-                      "edad",
-                      e.target.value
-                    )
-                  }
-                  style={inputStyle}
+                  onChange={(e) => set("edad", e.target.value)}
+                  className="campo-input"
                   placeholder="Opcional"
                 />
               </div>
 
-              <div style={{ flex: 1 }}>
-                <div style={labelStyle}>
-                  Género
-                </div>
+              <div className="form-flexible">
+                <div className="campo-etiqueta">Género</div>
 
                 <select
                   value={form.genero}
-                  onChange={(e) =>
-                    set(
-                      "genero",
-                      e.target.value
-                    )
-                  }
-                  style={inputStyle}
+                  onChange={(e) => set("genero", e.target.value)}
+                  className="campo-input"
                 >
-                  <option value="">
-                    No especificado
-                  </option>
+                  <option value="">No especificado</option>
 
-                  <option value="femenino">
-                    Femenino
-                  </option>
+                  <option value="femenino">Femenino</option>
 
-                  <option value="masculino">
-                    Masculino
-                  </option>
+                  <option value="masculino">Masculino</option>
                 </select>
               </div>
             </div>
@@ -535,21 +327,19 @@ function FormularioReporte({
         ------------------------------------------------- */}
 
         <div>
-          <div style={labelStyle}>
+          <div className="campo-etiqueta">
             Último sector / barrio conocido *
           </div>
 
           <input
             value={form.sector}
-            onChange={(e) =>
-              set("sector", e.target.value)
-            }
-            style={inputStyle}
+            onChange={(e) => set("sector", e.target.value)}
+            className="campo-input"
             placeholder="Ej: Centro, Cuba..."
             required
           />
 
-          <div style={helperStyle}>
+          <div className="campo-helper">
             Indica dónde fue vista por última vez.
           </div>
         </div>
@@ -559,23 +349,14 @@ function FormularioReporte({
         ------------------------------------------------- */}
 
         <div>
-          <div style={labelStyle}>
+          <div className="campo-etiqueta">
             Descripción / señas particulares
           </div>
 
           <textarea
             value={form.descripcion}
-            onChange={(e) =>
-              set(
-                "descripcion",
-                e.target.value
-              )
-            }
-            style={{
-              ...inputStyle,
-              minHeight: 70,
-              resize: "vertical",
-            }}
+            onChange={(e) => set("descripcion", e.target.value)}
+            className="campo-input campo-textarea-grande"
             placeholder={
               form.categoria === "personas"
                 ? "Ropa que llevaba, características particulares, información relevante..."
@@ -589,27 +370,17 @@ function FormularioReporte({
         ------------------------------------------------- */}
 
         <div>
-          <div style={labelStyle}>
-            Foto
-          </div>
+          <div className="campo-etiqueta">Foto</div>
 
           <input
             type="file"
             accept="image/*"
-            onChange={(e) =>
-              setFile(
-                e.target.files[0] || null
-              )
-            }
-            style={{
-              marginTop: 4,
-              fontSize: 13,
-            }}
+            onChange={(e) => setFile(e.target.files[0] || null)}
+            className="campo-archivo"
           />
 
-          <div style={helperStyle}>
-            Una foto clara ayuda a identificar
-            el reporte.
+          <div className="campo-helper">
+            Una foto clara ayuda a identificar el reporte.
           </div>
         </div>
 
@@ -618,7 +389,7 @@ function FormularioReporte({
         ------------------------------------------------- */}
 
         <div>
-          <div style={labelStyle}>
+          <div className="campo-etiqueta">
             Teléfono de contacto (WhatsApp) *
           </div>
 
@@ -626,12 +397,9 @@ function FormularioReporte({
             type="tel"
             value={form.telefono}
             onChange={(e) =>
-              set(
-                "telefono",
-                e.target.value.replace(/\D/g, "")
-              )
+              set("telefono", e.target.value.replace(/\D/g, ""))
             }
-            style={inputStyle}
+            className="campo-input"
             placeholder="Ej: 3001234567"
             inputMode="tel"
             pattern="[0-9]*"
@@ -645,33 +413,10 @@ function FormularioReporte({
 
         <button
           type="submit"
-          disabled={
-            enviando ||
-            !form.ciudad
-          }
-          style={{
-            background: "#1F3A34",
-            color: "#fff",
-            border: "none",
-            borderRadius: 8,
-            padding: "11px 0",
-            fontSize: 14,
-            fontWeight: 700,
-            cursor:
-              enviando ||
-              !form.ciudad
-                ? "default"
-                : "pointer",
-            opacity:
-              enviando ||
-              !form.ciudad
-                ? 0.7
-                : 1,
-          }}
+          disabled={enviando || !form.ciudad}
+          className="boton-enviar"
         >
-          {enviando
-            ? "Publicando..."
-            : "Publicar reporte"}
+          {enviando ? "Publicando..." : "Publicar reporte"}
         </button>
       </form>
     </Modal>

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
 import useBodyScrollLock from "../../hooks/useBodyScrollLock";
+import "./VisorFoto.css";
 
 export default function VisorFoto({ src, onClose }) {
   useBodyScrollLock(true);
@@ -14,41 +15,18 @@ export default function VisorFoto({ src, onClose }) {
   }, [onClose]);
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(10,10,9,0.9)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 60,
-        padding: 16,
-        overscrollBehavior: "none",
-      }}
-      onClick={onClose}
-    >
+    <div className="visor-foto-overlay" onClick={onClose}>
       <X
         size={26}
         color="#fff"
-        style={{
-          position: "absolute",
-          top: 16,
-          right: 16,
-          cursor: "pointer",
-        }}
+        className="visor-foto-cerrar"
         onClick={onClose}
       />
 
       <img
         src={src}
         alt="Foto de mascota"
-        style={{
-          maxWidth: "100%",
-          maxHeight: "90vh",
-          borderRadius: 8,
-          objectFit: "contain",
-        }}
+        className="visor-foto-imagen"
         onClick={(e) => e.stopPropagation()}
       />
     </div>
