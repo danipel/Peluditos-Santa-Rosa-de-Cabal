@@ -1,7 +1,10 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
+import useBodyScrollLock from "../../hooks/useBodyScrollLock";
 
 export default function ImageModal({ src, alt, title, subtitle, onClose }) {
+  useBodyScrollLock(true);
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") onClose();
@@ -23,6 +26,7 @@ export default function ImageModal({ src, alt, title, subtitle, onClose }) {
         justifyContent: "center",
         zIndex: 60,
         padding: 16,
+        overscrollBehavior: "none",
       }}
       onClick={onClose}
       role="dialog"

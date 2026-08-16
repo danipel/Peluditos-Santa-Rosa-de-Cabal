@@ -1,6 +1,18 @@
+import { useEffect } from "react";
 import { X } from "lucide-react";
+import useBodyScrollLock from "../../hooks/useBodyScrollLock";
 
 export default function VisorFoto({ src, onClose }) {
+  useBodyScrollLock(true);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape" && onClose) onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
   return (
     <div
       style={{
@@ -12,6 +24,7 @@ export default function VisorFoto({ src, onClose }) {
         justifyContent: "center",
         zIndex: 60,
         padding: 16,
+        overscrollBehavior: "none",
       }}
       onClick={onClose}
     >

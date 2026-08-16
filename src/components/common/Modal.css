@@ -1,0 +1,101 @@
+/* ==========================================================================
+   Base Mobile Styles (Mobile-first, preserved as currently defined)
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 20, 18, 0.45);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 50;
+  overscroll-behavior: none;
+}
+
+.modal-container {
+  background: #fff;
+  width: 100%;
+  max-width: 480px;
+  max-height: 88vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 16px 16px 0 0;
+  padding: 18px;
+  box-sizing: border-box;
+  animation: modalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.modal-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 15.5px;
+}
+
+.modal-close-btn {
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.modal-close-btn:hover {
+  opacity: 0.75;
+}
+
+@keyframes modalSlideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0.8;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   Desktop Styles (Tailwind `sm` breakpoint: >= 640px)
+   Centering modal in the middle of viewport with rounded corners & shadow
+   ========================================================================== */
+@media (min-width: 640px) {
+  .modal-overlay {
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .modal-container {
+    max-width: 520px;
+    max-height: calc(100vh - 48px);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    animation: modalPopIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .modal-header {
+    margin-bottom: 18px;
+  }
+
+  .modal-title {
+    font-size: 16.5px;
+  }
+}
+
+@keyframes modalPopIn {
+  from {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
