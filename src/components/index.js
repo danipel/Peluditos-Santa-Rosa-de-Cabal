@@ -4,6 +4,7 @@ export { default as VisorFoto } from "./common/VisorFoto";
 export { default as Card } from "./common/Card";
 export { default as BannerAyuda } from "./common/BannerAyuda";
 export { default as BotonCompartir } from "./common/BotonCompartir";
+export { default as BotonArriba } from "./common/BotonArriba";
 export { default as Header } from "./layout/Header";
 export { default as Footer } from "./layout/Footer";
 export { default as AlbergueBanner } from "./albergue/AlbergueBanner";
@@ -16,3 +17,4 @@ export { default as FormularioAvistamiento } from "./forms/FormularioAvistamient
 export { default as FormularioLogin } from "./forms/FormularioLogin";
 export { default as FormularioReporte } from "./forms/FormularioReporte";
 export { default as TarjetaCiudad } from "./common/TarjetaCiudad";
+export { default as JsonLd } from "./seo/JsonLd";

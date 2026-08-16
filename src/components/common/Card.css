@@ -73,6 +73,7 @@
 }
 
 .card-nombre {
+  margin: 0;
   font-weight: 700;
   font-size: 14.5px;
 }
@@ -89,6 +90,22 @@
   padding: 2px 8px;
   border-radius: 999px;
   white-space: nowrap;
+}
+
+.card-señas {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.card-señas-titulo {
+  margin: 0;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--color-texto-tenue);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
 }
 
 .card-dato {
@@ -120,11 +137,21 @@
 }
 
 .card-avistamientos-titulo {
+  margin: 0;
   font-size: 11.5px;
   font-weight: 700;
   color: var(--color-advertencia);
   display: flex;
   align-items: center;
+  gap: 4px;
+}
+
+.card-avistamientos-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
   gap: 4px;
 }
 

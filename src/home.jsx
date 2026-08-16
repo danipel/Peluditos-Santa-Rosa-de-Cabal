@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -6,17 +6,29 @@ import {
     Footer,
     FormularioLogin,
     TarjetaCiudad,
+    JsonLd,
+    BotonArriba,
 } from "./components/index.js";
 
 import { useSession } from "./hooks/useSession";
+import { fetchConteosGlobales } from "./services/reportesService";
 
 import "./home.css";
+
+const SITE_URL = import.meta.env.VITE_SITE_URL || "";
 
 export default function Home() {
     const navigate = useNavigate();
 
     const [showLogin, setShowLogin] = useState(false);
+    const [conteosGlobales, setConteosGlobales] = useState(null);
     const { session, login, logout } = useSession();
+
+    useEffect(() => {
+        fetchConteosGlobales()
+            .then(setConteosGlobales)
+            .catch(() => {});
+    }, []);
 
     async function handleLogin(email, password) {
         const error = await login(email, password);
@@ -57,6 +69,20 @@ export default function Home() {
 
     return (
         <div className="pagina">
+            <JsonLd
+                data={{
+                    "@context": "https://schema.org",
+                    "@type": "ItemList",
+                    name: "Ciudades con reportes de mascotas perdidas",
+                    itemListElement: tarjetas.map((t, i) => ({
+                        "@type": "ListItem",
+                        position: i + 1,
+                        name: t.titulo,
+                        url: `${SITE_URL}/?ciudad=${encodeURIComponent(t.url)}`,
+                    })),
+                }}
+            />
+
             <Header
                 session={session}
                 onLogin={() => setShowLogin(true)}
@@ -79,20 +105,44 @@ export default function Home() {
                     Elige el ciudad que deseas consultar
                 </p>
 
-                <div className="home-grid">
+                <p className="home-resumen">
+                    {conteosGlobales ? (
+                        <>
+                            Ya hay{" "}
+                            <strong>{conteosGlobales.total}</strong> reportes en
+                            Risaralda:{" "}
+                            <strong>
+                                {conteosGlobales.porEspecie.perro || 0}
+                            </strong>{" "}
+                            perros y{" "}
+                            <strong>
+                                {conteosGlobales.porEspecie.gato || 0}
+                            </strong>{" "}
+                            gatos. Elige tu ciudad para ayudar a reunirlos.
+                        </>
+                    ) : (
+                        "Ayuda a reencontrar mascotas perdidas en Pereira, Dosquebradas y Santa Rosa de Cabal."
+                    )}
+                </p>
+
+                <ul className="home-grid">
                     {tarjetas.map((tarjeta) => (
-                        <TarjetaCiudad
+                        <li
                             key={tarjeta.titulo}
-                            titulo={tarjeta.titulo}
-                            imagen={tarjeta.imagen}
-                            onClick={() =>
-                                seleccionarCiudad(
-                                    tarjeta.url
-                                )
-                            }
-                        />
+                            className="home-grid-item"
+                        >
+                            <TarjetaCiudad
+                                titulo={tarjeta.titulo}
+                                imagen={tarjeta.imagen}
+                                onClick={() =>
+                                    seleccionarCiudad(
+                                        tarjeta.url
+                                    )
+                                }
+                            />
+                        </li>
                     ))}
-                </div>
+                </ul>
             </main>
 
             <Footer
@@ -100,6 +150,8 @@ export default function Home() {
                 onReportar={() => navigate("/?ciudad=Todos")}
                 onCambiarCiudad={() => navigate("/home")}
             />
+
+            <BotonArriba />
         </div>
     );
 }

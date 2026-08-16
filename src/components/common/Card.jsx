@@ -132,13 +132,13 @@ export default function Card({
       <div className="card-info-wrapper">
         <div className="card-info-scroll">
           <div className="card-cabecera">
-            <div className="card-nombre">
+            <h2 className="card-nombre">
               {reporte.nombre ? reporte.nombre : especie}
 
               <span className="card-nombre-especie">
                 {reporte.nombre ? ` · ${especie}` : ""}
               </span>
-            </div>
+            </h2>
 
             <span
               className="card-etiqueta-estado"
@@ -148,38 +148,44 @@ export default function Card({
             </span>
           </div>
 
-          <div className="card-dato">
-            {reporte.color}
+          <section className="card-señas">
+            <h3 className="card-señas-titulo">Señas particulares</h3>
 
-            {reporte.tamano ? ` · ${reporte.tamano}` : ""}
-          </div>
+            <div className="card-dato">
+              {reporte.color}
 
-          <div className="card-sector">
-            <MapPin size={12} />
-            {reporte.sector + " - " + reporte.ciudad}
-          </div>
+              {reporte.tamano ? ` · ${reporte.tamano}` : ""}
+            </div>
 
-          {reporte.descripcion && (
-            <div className="card-descripcion">{reporte.descripcion}</div>
-          )}
+            <div className="card-sector">
+              <MapPin size={12} />
+              {reporte.sector + " - " + reporte.ciudad}
+            </div>
+
+            {reporte.descripcion && (
+              <div className="card-descripcion">{reporte.descripcion}</div>
+            )}
+          </section>
 
           {avistamientos.length > 0 && (
-            <div className="card-avistamientos">
-              <div className="card-avistamientos-titulo">
+            <section className="card-avistamientos">
+              <h3 className="card-avistamientos-titulo">
                 <Eye size={12} />
 
                 {avistamientos.length} avistamiento
                 {avistamientos.length > 1 ? "s" : ""}
-              </div>
+              </h3>
 
-              {avistamientos.slice(0, 3).map((a) => (
-                <div key={a.id} className="card-avistamiento">
-                  {a.sector}
-                  {a.hora ? ` · ${a.hora}` : ""}
-                  {a.descripcion ? ` — ${a.descripcion}` : ""}
-                </div>
-              ))}
-            </div>
+              <ul className="card-avistamientos-lista">
+                {avistamientos.slice(0, 3).map((a) => (
+                  <li key={a.id} className="card-avistamiento">
+                    {a.sector}
+                    {a.hora ? ` · ${a.hora}` : ""}
+                    {a.descripcion ? ` — ${a.descripcion}` : ""}
+                  </li>
+                ))}
+              </ul>
+            </section>
           )}
 
           {coincidencias.length > 0 && (

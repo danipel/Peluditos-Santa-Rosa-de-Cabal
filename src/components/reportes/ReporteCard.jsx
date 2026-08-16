@@ -60,12 +60,12 @@ export default function ReporteCard({ reporte, coincidencias = [], onCambiarEsta
       <div className="reporte-card-info-wrapper">
         <div className="reporte-card-info-scroll">
           <div className="reporte-card-cabecera">
-            <div className="reporte-card-nombre">
+            <h2 className="reporte-card-nombre">
               {reporte.nombre ? reporte.nombre : (ESPECIES[reporte.especie] || reporte.especie)}{" "}
               <span className="reporte-card-nombre-especie">
                 {reporte.nombre ? `· ${ESPECIES[reporte.especie] || reporte.especie}` : ""}
               </span>
-            </div>
+            </h2>
             <span
               className="reporte-card-etiqueta"
               style={{ color: estado.color, background: estado.bg }}
@@ -74,50 +74,54 @@ export default function ReporteCard({ reporte, coincidencias = [], onCambiarEsta
             </span>
           </div>
 
-          <div className="reporte-card-dato">
-            {reporte.color}
-            {reporte.tamano ? ` · ${reporte.tamano}` : ""}
-          </div>
+          <section className="reporte-card-señas">
+            <h3 className="reporte-card-señas-titulo">Señas particulares</h3>
 
-          <div className="reporte-card-sector">
-            <MapPin size={14} color="#8A8A85" /> {reporte.sector}
-          </div>
-
-          {reporte.telefono && (
-            <div className="reporte-card-telefono">
-              <Phone size={13} color="#7A7870" />
-              <span className="reporte-card-telefono-numero">
-                {reporte.telefono}
-              </span>
-              <button
-                type="button"
-                onClick={handleCopiarTelefono}
-                className={`reporte-card-copiar ${
-                  copiado ? "reporte-card-copiar--copiado" : ""
-                }`}
-                title="Copiar número de contacto"
-                aria-label="Copiar número de teléfono"
-              >
-                {copiado ? (
-                  <>
-                    <Check size={12} />
-                    <span>Copiado</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy size={12} />
-                    <span>Copiar</span>
-                  </>
-                )}
-              </button>
+            <div className="reporte-card-dato">
+              {reporte.color}
+              {reporte.tamano ? ` · ${reporte.tamano}` : ""}
             </div>
-          )}
 
-          {reporte.descripcion && (
-            <div className="reporte-card-descripcion">
-              {reporte.descripcion}
+            <div className="reporte-card-sector">
+              <MapPin size={14} color="#8A8A85" /> {reporte.sector}
             </div>
-          )}
+
+            {reporte.telefono && (
+              <div className="reporte-card-telefono">
+                <Phone size={13} color="#7A7870" />
+                <span className="reporte-card-telefono-numero">
+                  {reporte.telefono}
+                </span>
+                <button
+                  type="button"
+                  onClick={handleCopiarTelefono}
+                  className={`reporte-card-copiar ${
+                    copiado ? "reporte-card-copiar--copiado" : ""
+                  }`}
+                  title="Copiar número de contacto"
+                  aria-label="Copiar número de teléfono"
+                >
+                  {copiado ? (
+                    <>
+                      <Check size={12} />
+                      <span>Copiado</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy size={12} />
+                      <span>Copiar</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
+
+            {reporte.descripcion && (
+              <div className="reporte-card-descripcion">
+                {reporte.descripcion}
+              </div>
+            )}
+          </section>
 
           {coincidencias.length > 0 && (
             <div className="reporte-card-coincidencia">

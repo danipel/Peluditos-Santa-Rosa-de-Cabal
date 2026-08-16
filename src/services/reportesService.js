@@ -20,6 +20,32 @@ export async function fetchReportes(ciudad) {
 }
 
 /**
+ * Obtiene el conteo global de reportes (por estado y por especie) en toda Risaralda.
+ * Se usa para el resumen (TL;DR) de la página de inicio.
+ */
+export async function fetchConteosGlobales() {
+  const { data, error } = await supabase
+    .from("reportes")
+    .select("estado, especie");
+
+  if (error) throw error;
+
+  const porEstado = {};
+  const porEspecie = {};
+
+  (data || []).forEach((r) => {
+    if (r.estado) porEstado[r.estado] = (porEstado[r.estado] || 0) + 1;
+    if (r.especie) porEspecie[r.especie] = (porEspecie[r.especie] || 0) + 1;
+  });
+
+  return {
+    total: (data || []).length,
+    porEstado,
+    porEspecie,
+  };
+}
+
+/**
  * Sube una fotografía al bucket 'fotos' de Supabase Storage y retorna la URL pública.
  */
 export async function uploadFoto(file) {

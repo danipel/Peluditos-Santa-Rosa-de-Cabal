@@ -1,0 +1,51 @@
+.boton-arriba {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-superficie);
+  color: var(--color-acento);
+  border: 1px solid var(--color-acento);
+  border-radius: 999px;
+  box-shadow: 0 6px 18px rgba(31, 58, 52, 0.25);
+  cursor: pointer;
+  z-index: 40;
+  animation: boton-arriba-aparece 0.2s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.boton-arriba:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(31, 58, 52, 0.3);
+}
+
+.boton-arriba:active {
+  transform: translateY(0);
+}
+
+.boton-arriba:focus-visible {
+  outline: 2px solid var(--color-acento);
+  outline-offset: 3px;
+}
+
+@keyframes boton-arriba-aparece {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boton-arriba {
+    transition: none;
+    animation: none;
+  }
+}

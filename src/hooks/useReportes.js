@@ -203,6 +203,19 @@ export function useReportes(ciudad) {
     return resultado;
   }, [reportes, cumpleFiltrosBase]);
 
+  const conteosPorEspecie = useMemo(() => {
+    const resultado = {};
+
+    reportes.forEach((r) => {
+      if (!cumpleFiltrosBase(r)) return;
+
+      const clave = r.especie || "otro";
+      resultado[clave] = (resultado[clave] || 0) + 1;
+    });
+
+    return resultado;
+  }, [reportes, cumpleFiltrosBase]);
+
   // ---------------------------------------------------------
   // Coincidencias (actividad en el mismo sector)
   // ---------------------------------------------------------
@@ -260,6 +273,7 @@ export function useReportes(ciudad) {
     setBusqueda,
     filtrados,
     conteos,
+    conteosPorEspecie,
     coincidencias,
     agregarReporte,
     agregarAvistamiento,

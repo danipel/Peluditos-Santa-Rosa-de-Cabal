@@ -19,13 +19,15 @@ import {
   BannerAyuda,
   BotonReportar,
   BotonCompartir,
+  BotonArriba,
   FormularioAlbergue,
   FormularioAvistamiento,
   FormularioLogin,
   FormularioReporte,
+  JsonLd,
 } from "./components/index.js";
 
-import { ESTADOS } from "./constants/mascotas.js";
+import { ESTADOS, ESPECIES } from "./constants/mascotas.js";
 import { useSession } from "./hooks/useSession";
 import { useReportes } from "./hooks/useReportes";
 import { useAlbergue } from "./hooks/useAlbergue";
@@ -38,6 +40,26 @@ const ciudades = [
   "Santa Rosa de Cabal",
 ];
 
+const SITE_URL = import.meta.env.VITE_SITE_URL || "";
+
+const REGISTROS_POR_PAGINA = 14;
+
+function obtenerPaginas(total, actual) {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+
+  const paginas = new Set([1, total, actual - 1, actual, actual + 1]);
+  return Array.from(paginas)
+    .filter((p) => p >= 1 && p <= total)
+    .sort((a, b) => a - b)
+    .reduce((acc, p) => {
+      if (acc.length && p - acc[acc.length - 1] > 1) acc.push("...");
+      acc.push(p);
+      return acc;
+    }, []);
+}
+
 export default function App() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -48,6 +70,7 @@ export default function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [avistamientoDe, setAvistamientoDe] = useState(null);
   const [fotoAmpliada, setFotoAmpliada] = useState(null);
+  const [pagina, setPagina] = useState(1);
 
   const { session, login, logout } = useSession();
 
@@ -67,6 +90,7 @@ export default function App() {
     setBusqueda,
     filtrados,
     conteos,
+    conteosPorEspecie,
     coincidencias,
     agregarReporte,
     agregarAvistamiento,
@@ -75,6 +99,26 @@ export default function App() {
   } = useReportes(ciudad);
 
   const { albergues, guardarAlbergue } = useAlbergue(ciudad);
+
+  // ---------------------------------------------------------
+  // Paginación
+  // ---------------------------------------------------------
+
+  useEffect(() => {
+    setPagina(1);
+  }, [ciudad, filtroCategoria, filtroEspecie, filtroTipo, busqueda]);
+
+  const totalPaginas = Math.max(
+    1,
+    Math.ceil(filtrados.length / REGISTROS_POR_PAGINA)
+  );
+  const paginaActual = Math.min(pagina, totalPaginas);
+  const inicio = (paginaActual - 1) * REGISTROS_POR_PAGINA;
+  const visibles = filtrados.slice(inicio, inicio + REGISTROS_POR_PAGINA);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [paginaActual]);
 
   // ---------------------------------------------------------
   // Si entran directamente a "/" sin ciudad
@@ -125,6 +169,24 @@ export default function App() {
 
   return (
     <div className="pagina">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: `Mascotas reportadas en ${ciudad || "Risaralda"}`,
+          numberOfItems: filtrados.length,
+          itemListElement: filtrados.map((r, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            name: r.nombre || ESPECIES[r.especie] || r.especie,
+            image: r.foto_url || undefined,
+            url: `${SITE_URL}/?ciudad=${encodeURIComponent(
+              ciudad || ""
+            )}#reporte-${r.id}`,
+          })),
+        }}
+      />
+
       <Header
         session={session}
         onLogin={() => setShowLogin(true)}
@@ -310,23 +372,151 @@ export default function App() {
             todavía.
           </div>
         ) : (
-          <div className="reportes-grid">
-            {filtrados.map((r) => (
-              <Card
-                key={r.id}
-                reporte={r}
-                session={session}
-                avistamientos={avistamientos.filter(
-                  (a) => a.reporte_id === r.id
+          <>
+            <div className="reportes-grid">
+              {visibles.map((r) => (
+                <Card
+                  key={r.id}
+                  reporte={r}
+                  session={session}
+                  avistamientos={avistamientos.filter(
+                    (a) => a.reporte_id === r.id
+                  )}
+                  coincidencias={coincidencias(r)}
+                  onCambiarEstado={cambiarEstado}
+                  onBorrar={borrarReporte}
+                  onAgregarAvistamiento={() => setAvistamientoDe(r.id)}
+                  onAmpliarFoto={() => setFotoAmpliada(r.foto_url)}
+                />
+              ))}
+            </div>
+
+            {totalPaginas > 1 && (
+              <nav
+                className="app-paginacion"
+                aria-label="Paginación de reportes"
+              >
+                <button
+                  onClick={() => setPagina((p) => Math.max(1, p - 1))}
+                  disabled={paginaActual === 1}
+                  className="app-paginacion-boton"
+                >
+                  Anterior
+                </button>
+
+                {obtenerPaginas(totalPaginas, paginaActual).map((p, i) =>
+                  p === "..." ? (
+                    <span key={`sep-${i}`} className="app-paginacion-sep">
+                      …
+                    </span>
+                  ) : (
+                    <button
+                      key={p}
+                      onClick={() => setPagina(p)}
+                      className={`app-paginacion-numero ${
+                        p === paginaActual
+                          ? "app-paginacion-numero--activo"
+                          : ""
+                      }`}
+                      aria-current={
+                        p === paginaActual ? "page" : undefined
+                      }
+                    >
+                      {p}
+                    </button>
+                  )
                 )}
-                coincidencias={coincidencias(r)}
-                onCambiarEstado={cambiarEstado}
-                onBorrar={borrarReporte}
-                onAgregarAvistamiento={() => setAvistamientoDe(r.id)}
-                onAmpliarFoto={() => setFotoAmpliada(r.foto_url)}
-              />
-            ))}
-          </div>
+
+                <button
+                  onClick={() =>
+                    setPagina((p) => Math.min(totalPaginas, p + 1))
+                  }
+                  disabled={paginaActual === totalPaginas}
+                  className="app-paginacion-boton"
+                >
+                  Siguiente
+                </button>
+              </nav>
+            )}
+          </>
+        )}
+
+        {/* Resumen (TL;DR) y tablas de posicionamiento */}
+
+        {!loading && (
+          <section className="app-resumen">
+            <h2 className="app-resumen-titulo">
+              Resumen en {ciudad}
+            </h2>
+
+            <p className="app-resumen-texto">
+              Hay <strong>{conteos.todos}</strong> reportes activos:{" "}
+              <strong>{conteos.perdido}</strong> perdidos,{" "}
+              <strong>{conteos.avistado}</strong> avistados,{" "}
+              <strong>{conteos.en_albergue}</strong> en hogar de paso y{" "}
+              <strong>{conteos.reunido}</strong> reunidos.
+            </p>
+
+            <table className="app-tabla-resumen">
+              <caption>
+                Mascotas por estado en {ciudad}
+              </caption>
+
+              <thead>
+                <tr>
+                  <th scope="col">Estado</th>
+                  <th scope="col">Cantidad</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <th scope="row">Perdidos</th>
+                  <td>{conteos.perdido}</td>
+                </tr>
+
+                <tr>
+                  <th scope="row">Avistados</th>
+                  <td>{conteos.avistado}</td>
+                </tr>
+
+                <tr>
+                  <th scope="row">En hogar de paso</th>
+                  <td>{conteos.en_albergue}</td>
+                </tr>
+
+                <tr>
+                  <th scope="row">Reunidos</th>
+                  <td>{conteos.reunido}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table className="app-tabla-resumen">
+              <caption>
+                Mascotas por especie en {ciudad}
+              </caption>
+
+              <thead>
+                <tr>
+                  <th scope="col">Especie</th>
+                  <th scope="col">Cantidad</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <th scope="row">{ESPECIES.perro}</th>
+                  <td>{conteosPorEspecie.perro || 0}</td>
+                </tr>
+
+                <tr>
+                  <th scope="row">{ESPECIES.gato}</th>
+                  <td>{conteosPorEspecie.gato || 0}</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
         )}
       </div>
 
@@ -335,6 +525,8 @@ export default function App() {
       <BotonReportar onClick={() => setShowForm(true)} />
 
       <BotonCompartir />
+
+      <BotonArriba />
 
       <Footer
         onInicio={() => navigate("/home")}

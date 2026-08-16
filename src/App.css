@@ -200,6 +200,106 @@
   gap: 6px;
 }
 
+.app-resumen {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.app-resumen-titulo {
+  margin: 0 0 6px;
+  font-size: 15px;
+  color: var(--color-texto);
+}
+
+.app-resumen-texto {
+  margin: 0 0 12px;
+  font-size: 13.5px;
+  color: var(--color-texto-suave);
+  line-height: 1.5;
+}
+
+.app-tabla-resumen {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.app-tabla-resumen caption {
+  caption-side: top;
+  text-align: left;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--color-texto-tenue);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding-bottom: 6px;
+}
+
+.app-tabla-resumen th,
+.app-tabla-resumen td {
+  padding: 6px 10px;
+  border: 1px solid var(--color-borde-suave);
+  text-align: left;
+}
+
+.app-tabla-resumen th {
+  background: var(--color-borde-suave);
+  font-weight: 600;
+  color: var(--color-texto-suave);
+}
+
+.app-tabla-resumen th:last-child,
+.app-tabla-resumen td:last-child {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.app-paginacion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 16px 0;
+}
+
+.app-paginacion-boton,
+.app-paginacion-numero {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--color-borde);
+  background: var(--color-superficie);
+  color: var(--color-texto-suave);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.app-paginacion-boton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.app-paginacion-numero {
+  min-width: 36px;
+  text-align: center;
+}
+
+.app-paginacion-numero--activo {
+  border-color: var(--color-primario);
+  background: var(--color-primario);
+  color: #ffffff;
+}
+
+.app-paginacion-sep {
+  color: var(--color-texto-tenue);
+  padding: 0 2px;
+}
+
 @media (min-width: 640px) {
   .reportes-grid {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
