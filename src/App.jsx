@@ -26,6 +26,7 @@ import {
   Footer,
   Card,
   VisorFoto,
+  BannerAyuda,
   BotonReportar,
   FormularioAlbergue,
   FormularioAvistamiento,
@@ -976,6 +977,8 @@ export default function App() {
         </div>
 
         {/* Reportes */}
+
+        <BannerAyuda />
 
         {loading ? (
           <div

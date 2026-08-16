@@ -9,7 +9,7 @@ import {
   Heart,
 } from "lucide-react";
 
-import { ESTADOS, ESPECIES, TELEFONO_REUNIDO } from "../../constants/mascotas";
+import { ESTADOS, ESPECIES, WHATSAPP_AYUDA } from "../../constants/mascotas";
 
 const estilos = `
   .card-imagen {
@@ -98,7 +98,7 @@ export default function Card({
     acciones.push(
       <a
         key="casa"
-        href={`https://wa.me/57${TELEFONO_REUNIDO}?text=${waReunidoMsg}`}
+        href={`https://wa.me/57${WHATSAPP_AYUDA}?text=${waReunidoMsg}`}
         target="_blank"
         rel="noreferrer"
         title="Avisar que la mascota ya está en casa"
