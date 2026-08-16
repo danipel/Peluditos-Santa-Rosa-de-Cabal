@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   useNavigate,
   useSearchParams,
@@ -527,8 +527,7 @@ export default function App() {
   // Filtros
   // ---------------------------------------------------------
 
-  const filtrados = reportes.filter((r) => {
-
+  const cumpleFiltrosBase = (r) => {
     // Categoría
     if (
       filtroCategoria === "mascotas" &&
@@ -540,14 +539,6 @@ export default function App() {
     if (
       filtroCategoria === "personas" &&
       r.especie !== "persona"
-    ) {
-      return false;
-    }
-
-    // Estado
-    if (
-      filtroTipo !== "todos" &&
-      r.estado !== filtroTipo
     ) {
       return false;
     }
@@ -576,7 +567,45 @@ export default function App() {
     }
 
     return true;
+  };
+
+  const filtrados = reportes.filter((r) => {
+    if (!cumpleFiltrosBase(r)) {
+      return false;
+    }
+
+    // Estado
+    if (
+      filtroTipo !== "todos" &&
+      r.estado !== filtroTipo
+    ) {
+      return false;
+    }
+
+    return true;
   });
+
+  const conteos = useMemo(() => {
+    const resultado = { todos: 0 };
+
+    Object.keys(ESTADOS).forEach((estado) => {
+      resultado[estado] = 0;
+    });
+
+    reportes.forEach((r) => {
+      if (!cumpleFiltrosBase(r)) {
+        return;
+      }
+
+      resultado.todos += 1;
+
+      if (resultado[r.estado] !== undefined) {
+        resultado[r.estado] += 1;
+      }
+    });
+
+    return resultado;
+  }, [reportes, filtroCategoria, filtroEspecie, busqueda]);
 
   // ---------------------------------------------------------
   // Render
@@ -969,9 +998,8 @@ export default function App() {
               }}
             >
               {t === "todos"
-                ? "Todos"
-                : ESTADOS[t]
-                  .label}
+                ? `${conteos.todos} Todos`
+                : `${conteos[t]} ${ESTADOS[t].label}`}
             </button>
           ))}
         </div>
