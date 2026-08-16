@@ -20,6 +20,7 @@ import {
   BotonReportar,
   BotonCompartir,
   BotonArriba,
+  CtaReportar,
   FormularioAlbergue,
   FormularioAvistamiento,
   FormularioLogin,
@@ -62,7 +63,7 @@ function obtenerPaginas(total, actual) {
 
 export default function App() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const ciudad = searchParams.get("ciudad");
 
   const [showForm, setShowForm] = useState(false);
@@ -129,6 +130,20 @@ export default function App() {
       navigate("/home", { replace: true });
     }
   }, [ciudad, navigate]);
+
+  // ---------------------------------------------------------
+  // Auto-apertura del formulario vía ?reportar=1 (CTA de Home)
+  // ---------------------------------------------------------
+
+  useEffect(() => {
+    if (searchParams.get("reportar") === "1") {
+      setShowForm(true);
+
+      const nuevos = new URLSearchParams(searchParams);
+      nuevos.delete("reportar");
+      setSearchParams(nuevos, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   // ---------------------------------------------------------
   // Acciones que combinan lógica del hook con estado de UI
@@ -517,6 +532,17 @@ export default function App() {
               </tbody>
             </table>
           </section>
+        )}
+
+        {/* CTA de conversión */}
+
+        {!loading && (
+          <CtaReportar
+            titulo="¿Tu mascota está perdida?"
+            texto="Repórtala ahora y compártela para que la comunidad ayude a encontrarla."
+            etiquetaBoton="Reportar mascota"
+            onReportar={() => setShowForm(true)}
+          />
         )}
       </div>
 

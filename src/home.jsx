@@ -8,6 +8,7 @@ import {
     TarjetaCiudad,
     JsonLd,
     BotonArriba,
+    CtaReportar,
 } from "./components/index.js";
 
 import { useSession } from "./hooks/useSession";
@@ -104,6 +105,16 @@ export default function Home() {
                 <p className="home-subtitulo">
                     Elige el ciudad que deseas consultar
                 </p>
+
+                <CtaReportar
+                    titulo="¿Perdiste a tu mascota?"
+                    texto="Publícala gratis y la comunidad de Risaralda te ayudará a encontrarla."
+                    etiquetaBoton="Reportar mascota"
+                    onReportar={() =>
+                        navigate("/?ciudad=Todos&reportar=1")
+                    }
+                    onVerReportes={() => navigate("/?ciudad=Todos")}
+                />
 
                 <p className="home-resumen">
                     {conteosGlobales ? (
