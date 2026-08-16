@@ -13,3 +13,8 @@ export const ESPECIES = {
 export const WHATSAPP_AYUDA = "3117306947";
 
 export const INSTAGRAM_BRIGADA = "https://www.instagram.com/brigadastr";
+
+export const TITULO_COMPARTIR = "Mascotas Perdidas — Risaralda";
+
+export const TEXTO_COMPARTIR =
+  "Ayuda a encontrar mascotas perdidas en Santa Rosa de Cabal y Risaralda.";

@@ -3,6 +3,7 @@ export { default as ImageModal } from "./common/ImageModal";
 export { default as VisorFoto } from "./common/VisorFoto";
 export { default as Card } from "./common/Card";
 export { default as BannerAyuda } from "./common/BannerAyuda";
+export { default as BotonCompartir } from "./common/BotonCompartir";
 export { default as Header } from "./layout/Header";
 export { default as Footer } from "./layout/Footer";
 export { default as AlbergueBanner } from "./albergue/AlbergueBanner";

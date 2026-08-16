@@ -28,6 +28,7 @@ import {
   VisorFoto,
   BannerAyuda,
   BotonReportar,
+  BotonCompartir,
   FormularioAlbergue,
   FormularioAvistamiento,
   FormularioLogin,
@@ -1092,6 +1093,8 @@ export default function App() {
       <BotonReportar
         onClick={() => setShowForm(true)}
       />
+
+      <BotonCompartir />
 
 
       <Footer
