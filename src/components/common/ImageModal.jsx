@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
 import useBodyScrollLock from "../../hooks/useBodyScrollLock";
+import { conTransformacion } from "../../utils/imagen";
 import "./ImageModal.css";
 
 export default function ImageModal({ src, alt, title, subtitle, onClose }) {
@@ -35,7 +36,7 @@ export default function ImageModal({ src, alt, title, subtitle, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         <img
-          src={src}
+          src={conTransformacion(src, { width: 1200, quality: 80 })}
           alt={alt || "Foto de mascota"}
           className="image-modal-imagen"
         />

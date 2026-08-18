@@ -11,6 +11,7 @@ import {
 
 import { ESTADOS, ESPECIES, WHATSAPP_AYUDA } from "../../constants/mascotas";
 import { nombreDeCiudad } from "../../constants/ciudades";
+import { conTransformacion } from "../../utils/imagen";
 import "./Card.css";
 
 export default function Card({
@@ -124,7 +125,7 @@ export default function Card({
         }`}
       >
         {reporte.foto_url ? (
-          <img src={reporte.foto_url} alt="" />
+          <img src={conTransformacion(reporte.foto_url)} alt="" />
         ) : (
           <PawPrint size={40} color="#B4AF9F" />
         )}

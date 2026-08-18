@@ -1,4 +1,5 @@
 import { supabase } from "../supabaseClient";
+import { comprimirImagen } from "../utils/imagen";
 
 /**
  * Obtiene los reportes ordenados por fecha de creación descendente.
@@ -47,11 +48,16 @@ export async function fetchConteosGlobales() {
 
 /**
  * Sube una fotografía al bucket 'fotos' de Supabase Storage y retorna la URL pública.
+ * La imagen se redimensiona (máx. 800px) y comprime (~70% de calidad) en el
+ * navegador antes de subirla para reducir el consumo de ancho de banda.
  */
 export async function uploadFoto(file) {
-  const ext = file.name.split(".").pop();
+  const imagen = await comprimirImagen(file);
+  const ext = imagen.name.split(".").pop();
   const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-  const { error: uploadError } = await supabase.storage.from("fotos").upload(path, file);
+  const { error: uploadError } = await supabase.storage
+    .from("fotos")
+    .upload(path, imagen);
   if (uploadError) throw uploadError;
 
   const { data } = supabase.storage.from("fotos").getPublicUrl(path);

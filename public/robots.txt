@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://peluditos-santa-rosa-de-cabal.vercel.app/sitemap.xml

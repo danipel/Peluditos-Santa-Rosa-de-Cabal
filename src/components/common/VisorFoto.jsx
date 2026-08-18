@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
 import useBodyScrollLock from "../../hooks/useBodyScrollLock";
+import { conTransformacion } from "../../utils/imagen";
 import "./VisorFoto.css";
 
 export default function VisorFoto({ src, onClose }) {
@@ -24,7 +25,7 @@ export default function VisorFoto({ src, onClose }) {
       />
 
       <img
-        src={src}
+        src={conTransformacion(src, { width: 1200, quality: 80 })}
         alt="Foto de mascota"
         className="visor-foto-imagen"
         onClick={(e) => e.stopPropagation()}

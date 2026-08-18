@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { MapPin, Phone, MessageCircle, PawPrint, AlertCircle, Copy, Check } from "lucide-react";
 import { ESTADOS, ESPECIES } from "../../constants/mascotas";
+import { conTransformacion } from "../../utils/imagen";
 import ImageModal from "../common/ImageModal";
 import "./ReporteCard.css";
 
@@ -51,7 +52,7 @@ export default function ReporteCard({ reporte, coincidencias = [], onCambiarEsta
         }`}
       >
         {reporte.foto_url ? (
-          <img src={reporte.foto_url} alt="" />
+          <img src={conTransformacion(reporte.foto_url)} alt="" />
         ) : (
           <PawPrint size={32} color="#B4AF9F" />
         )}
